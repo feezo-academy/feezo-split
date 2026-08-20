@@ -1,0 +1,2234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>FeeZoapp</title>
+
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#ffffff">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="FeeZoapp">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<!-- Cloudflare Turnstile CAPTCHA -->
+<!-- Captcha teporarily disaled
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+-->
+<!-- Supabase Client -->
+<script type="module" src="js/supabase-init.js"></script>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+  <div class="star" style="width:2px;height:2px;top:12%;left:18%;animation-duration:2.8s;"></div>
+  <div class="star" style="width:3px;height:3px;top:22%;left:70%;animation-duration:3.5s;animation-delay:.5s;"></div>
+  <div class="star" style="width:2px;height:2px;top:35%;left:42%;animation-duration:2.4s;animation-delay:1s;"></div>
+  <div class="star" style="width:2px;height:2px;top:8%;left:85%;animation-duration:3.1s;animation-delay:.3s;"></div>
+  <div class="star" style="width:3px;height:3px;top:55%;left:10%;animation-duration:4s;animation-delay:1.4s;"></div>
+  <div class="star" style="width:2px;height:2px;top:68%;left:80%;animation-duration:2.9s;animation-delay:.8s;"></div>
+  <div class="star" style="width:2px;height:2px;top:78%;left:30%;animation-duration:3.4s;animation-delay:2s;"></div>
+  <div class="star" style="width:3px;height:3px;top:48%;left:60%;animation-duration:3.7s;animation-delay:.2s;"></div>
+  <div class="star" style="width:2px;height:2px;top:88%;left:55%;animation-duration:2.6s;animation-delay:1.6s;"></div>
+  <div class="star" style="width:2px;height:2px;top:30%;left:90%;animation-duration:3.3s;animation-delay:1.1s;"></div>
+  <div class="star" style="width:2px;height:2px;top:62%;left:38%;animation-duration:2.7s;animation-delay:.6s;"></div>
+  <div class="star" style="width:3px;height:3px;top:18%;left:50%;animation-duration:4.2s;animation-delay:2.3s;"></div>
+  <div class="meteor m1"></div>
+  <div class="meteor m2"></div>
+  <div class="meteor m3"></div>
+  <div class="meteor m4"></div>
+  <div class="meteor m5"></div>
+  <div class="login-box">
+    <div class="login-logo" id="loginLogo"><svg viewBox="0 0 24 24" fill="#e8392f" width="40" height="40"><circle cx="12" cy="8" r="4"/><path d="M12 14c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5z"/></svg></div>
+    <div class="login-title" id="loginAcadTitle">Welcome Back</div>
+    <div class="login-sub" id="loginTagline">Let's run your academy smarter</div>
+    <div class="login-error" id="loginError">⚠️ <span id="loginErrorMsg">Invalid ID or password. Please try again.</span></div>
+    <div class="login-field">
+      <label>Email / User ID Address</label>
+      <div class="field-wrap">
+        <span class="login-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#e8392f" stroke-width="2" width="17" height="17"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg></span>
+        <input type="text" id="loginId" placeholder="Enter your email or user ID" autocomplete="off" onkeydown="if(event.key==='Enter')doLogin()" oninput="clearLoginError()">
+      </div>
+    </div>
+    <div class="login-field">
+      <label>Password</label>
+      <div class="field-wrap">
+        <span class="login-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#e8392f" stroke-width="2" width="17" height="17"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+        <input type="password" id="loginPass" placeholder="Enter password" onkeydown="if(event.key==='Enter')doLogin()" oninput="clearLoginError()">
+        <button type="button" class="login-eye" onclick="toggleLoginPass()" title="Show/hide password"><svg viewBox="0 0 24 24" fill="none" stroke="#e8392f" stroke-width="2" width="17" height="17"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></button>
+      </div>
+    </div>
+    <!-- Cloudflare Turnstile CAPTCHA (bot protection) -->
+    <!-- CAPTCHA TEMPORARILY HIDDEN FOR TESTING: to RE-ENABLE, change "display:none" back to "display:flex" below -->
+    <div id="turnstileWidget" class="cf-turnstile" data-sitekey="0x4AAAAAADl5-__bpO6ektL1"
+         data-callback="onTurnstileSuccess" data-expired-callback="onTurnstileExpired"
+         style="margin:10px 0;display:none;justify-content:center;"></div>
+    <button class="btn-login" id="loginBtn" onclick="doLogin()" style="cursor:pointer;">Sign In to Portal</button>
+    <div class="login-support" id="loginSupport"></div>
+    <div style="text-align:center;margin-top:16px;font-size:11px;color:var(--gray);opacity:.8;">© 2026 FeeZo Solutions · v3</div>
+  </div>
+</div>
+
+
+
+<!-- CHANGE PASSWORD SCREEN (after first login) -->
+<div id="changePassScreen" style="display:none;position:fixed;inset:0;background:var(--royal);z-index:9997;align-items:center;justify-content:center;padding:20px;">
+  <div class="login-box">
+    <div class="login-logo">&#128273;</div>
+    <div class="login-title">Set Your Password</div>
+    <div class="login-sub">You are using a default password. Please set a new one to continue.</div>
+    <div class="login-error" id="chPassError">&#9888;&#65039; <span id="chPassErrorMsg">Passwords do not match.</span></div>
+    <div class="login-field">
+      <label>New Password</label>
+      <input type="password" id="chPassNew" placeholder="Enter new password" oninput="document.getElementById('chPassError').classList.remove('show')">
+    </div>
+    <div class="login-field">
+      <label>Confirm Password</label>
+      <input type="password" id="chPassConfirm" placeholder="Confirm new password" onkeydown="if(event.key==='Enter')doChangePass()">
+    </div>
+    <button class="btn-login" onclick="doChangePass()">Save Password &amp; Enter App &#8594;</button>
+  </div>
+</div>
+
+<!-- LOADING OVERLAY -->
+<div id="loadingOverlay">
+  <div style="position:relative;width:110px;height:110px;">
+    <svg id="loadRingSvg" width="110" height="110" viewBox="0 0 110 110" style="animation:loadRingSpin 1.1s linear infinite;">
+      <circle cx="55" cy="55" r="46" fill="none" stroke="#d3dae6" stroke-width="7"/>
+      <circle cx="55" cy="55" r="46" fill="none" stroke="#5b7cc4" stroke-width="7" stroke-linecap="round" stroke-dasharray="70 220"/>
+      <circle cx="55" cy="55" r="46" fill="none" stroke="#5b7cc4" stroke-width="7" stroke-linecap="round" stroke-dasharray="70 220" stroke-dashoffset="-145"/>
+    </svg>
+    <div id="loadPct" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:var(--white);">0%</div>
+  </div>
+  <div class="loading-msg" id="loadingMsg">Loading data…</div>
+  <div class="loading-sub" id="loadingSub"></div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app">
+
+  <!-- TOP BAR -->
+  <div class="topbar" style="gap:8px;">
+    <!-- LEFT: logo + academy name -->
+    <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
+      <div class="logo-img" id="topLogo" onclick="if(isAdmin())switchPage('profile')" style="cursor:pointer;flex-shrink:0;" title="Go to Profile">⚔️</div>
+      <div style="min-width:0;flex:1;overflow:hidden;">
+        <div class="academy-name" id="topAcadName" style="white-space:normal;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.25;font-size:13px;word-break:break-word;">Academy</div>
+        <div id="homeGreeting" style="font-size:11px;font-weight:600;color:var(--gray);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"></div>
+      </div>
+    </div>
+    <!-- RIGHT: bell + hamburger on top, date/time below -->
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;">
+      <!-- Icons row -->
+      <div style="display:flex;align-items:center;gap:6px;">
+        <!-- Bell icon -->
+        <button id="topBellBtn" onclick="toggleNotifPanel()" aria-label="Notifications"
+          style="width:34px;height:34px;border-radius:50%;background:var(--card2);border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gray)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          <span id="bellDot" style="display:none;position:absolute;top:4px;right:4px;width:9px;height:9px;background:#22c55e;border-radius:50%;border:2px solid var(--card2);"></span>
+        </button>
+        <!-- Hamburger -->
+        <button class="hamburger-btn" id="tabMenuBtn" onclick="toggleTabMenu()" aria-label="Navigation"
+          style="width:34px;height:34px;border-radius:50%;background:var(--card2);border:1px solid var(--border);">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <!-- Date & Time below icons -->
+      <div style="text-align:right;line-height:1.2;">
+        <div id="clockTime" class="datetime-time" style="font-size:12px;font-weight:700;">--:-- --</div>
+        <div id="clockDate" class="datetime-date" style="font-size:9px;">--/--/----</div>
+      </div>
+    </div>
+    <!-- Hidden role badge (used by JS) -->
+    <div style="display:none;" id="topRoleBadge"></div>
+    <div style="display:none;" id="topUserName"></div>
+  </div>
+
+  <!-- PAGES -->
+  <div class="content pages-viewport">
+
+    <!-- ===== HOME ===== -->
+    <div class="page active" id="pageHome" style="display:flex;flex-direction:column;overflow-y:auto;padding-bottom:90px;">
+      <!-- Dashboard Title + Month/Year Filter -->
+      <div style="margin-bottom:12px;">
+        <div class="section-title" style="margin-bottom:8px;">📈 Dashboard</div>
+        <!-- Hidden selects for JS value storage -->
+        <select id="dashMonth" onchange="loadDashboard()" style="display:none;"></select>
+        <select id="dashYear"  onchange="loadDashboard()" style="display:none;"></select>
+        <!-- Pill navigator: << < MMM YYYY > >> -->
+        <div class="my-nav">
+          <button class="my-nav-btn yr" onclick="navDash('year',-1)" title="Previous Year">&lt;&lt;</button>
+          <button class="my-nav-btn"    onclick="navDash('month',-1)" title="Previous Month">&lt;</button>
+          <div class="my-nav-label" id="dashNavLabel">— —</div>
+          <button class="my-nav-btn"    onclick="navDash('month',1)"  title="Next Month">&gt;</button>
+          <button class="my-nav-btn yr" onclick="navDash('year',1)"   title="Next Year">&gt;&gt;</button>
+        </div>
+        <!-- Sport + Batch filter (dashboard only) -->
+        <div style="display:flex;gap:6px;margin-top:8px;">
+          <select id="dashSport" onchange="onDashSportChange()" class="form-select" style="flex:1;min-width:110px;font-size:12px;padding:7px 9px;">
+            <option value="ALL">All Sports</option>
+          </select>
+          <select id="dashBatch" onchange="loadDashboard()" class="form-select" style="flex:1;min-width:110px;font-size:12px;padding:7px 9px;">
+            <option value="ALL">All Batches</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="stats-grid" style="flex-shrink:0;">
+        <div class="stat-card grad stat-blue" onclick="showTileStudents('total')" style="cursor:pointer;" title="Click to see students">
+          <div class="stat-icon">👥</div>
+          <div class="stat-label">Total Students</div>
+          <div class="stat-val" id="statTotal">0</div>
+        </div>
+        <div class="stat-card grad stat-orange" onclick="showTileStudents('joined')" style="cursor:pointer;" title="Click to see joined students">
+          <div class="stat-icon">🆕</div>
+          <div class="stat-label" id="statJoinedLabel">Joined</div>
+          <div class="stat-val" id="statTodayPresent">0</div>
+        </div>
+        <div class="stat-card grad stat-green" id="statCollectedCard" onclick="showTileStudents('collected')" style="cursor:pointer;" title="Click to see paid students">
+          <div class="stat-icon">✅</div>
+          <div class="stat-label">Fees Collected</div>
+          <div class="stat-val" style="font-size:16px;" id="statCollected">0</div>
+        </div>
+        <div class="stat-card grad stat-red" onclick="showTileStudents('pending')" style="cursor:pointer;" title="Click to see pending students">
+          <div class="stat-icon">⚠️</div>
+          <div class="stat-label">Fee Pending</div>
+          <div class="stat-val" id="statPending">0</div>
+        </div>
+      </div>
+
+      <!-- Hidden elements kept for JS compatibility -->
+      <span id="dashMonthLabel" style="display:none;"></span>
+      <div id="dashPresent" style="display:none;">0</div>
+      <div id="dashAbsent" style="display:none;">0</div>
+      <div id="dashLeave" style="display:none;">0</div>
+      <div id="dashHoliday" style="display:none;">0</div>
+      <div id="dashPendCount" style="display:none;"></div>
+      <div id="pendingList" style="display:none;"></div>
+      <div id="prevMonthLabel" style="display:none;"></div>
+      <div id="prevMonthPending" style="display:none;"></div>
+      <canvas id="dashBarChart" style="display:none;"></canvas>
+      <select id="chartRangeMonths" style="display:none;"><option value="6" selected>6</option></select>
+      <select id="chartRangeYears" style="display:none;"><option value="1" selected>1</option></select>
+      <div id="dashChartTitle" style="display:none;"></div>
+      <div id="dashChartLegend1" style="display:none;"><span></span></div>
+      <div id="dashChartLegend2" style="display:none;"><span></span></div>
+      <div id="dashChartLegendAvg" style="display:none;"></div>
+      <button id="chartBtnPresent" style="display:none;"></button>
+      <button id="chartBtnJoined" style="display:none;"></button>
+
+      <!-- INLINE BAR CHART TILE -->
+      <div class="card" style="margin-bottom:10px;padding:10px 10px 8px;">
+        <!-- Row 1: title + mode toggle + months selector -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:5px;">
+          <div style="font-size:13px;font-weight:700;color:var(--gold);" id="homeTileChartTitle">📊 Attendance</div>
+          <span id="homeTileLeg1Dot" style="display:none;"></span><span id="homeTileLeg1Text" style="display:none;"></span>        
+          <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;">
+            <!-- Mode toggle -->
+            <div style="display:flex;gap:2px;background:var(--royal);border-radius:7px;padding:2px;">
+              <button id="homeTileBtnAtt" onclick="setHomeTileMode('present')"
+                style="padding:3px 9px;border-radius:5px;border:none;font-size:10px;font-weight:700;cursor:pointer;background:var(--accent2);color:#fff;transition:all .15s;">Att</button>
+              <button id="homeTileBtnStr" onclick="setHomeTileMode('joined')"
+                style="padding:3px 9px;border-radius:5px;border:none;font-size:10px;font-weight:700;cursor:pointer;background:transparent;color:var(--gray);transition:all .15s;">Str</button>
+            </div>
+          </div>
+        </div>
+        <div style="overflow:hidden;">
+          <canvas id="homeTileCanvas" style="display:block;"></canvas>
+        </div>
+        <div id="homeTileLegend" style="display:flex;justify-content:center;gap:18px;margin-top:8px;font-size:11px;font-weight:600;">
+          <span style="display:flex;align-items:center;gap:5px;"><span id="legendDot1" style="width:11px;height:11px;border-radius:50%;background:#4caf8e;display:inline-block;"></span><span id="legendLabel1" style="color:var(--offwhite);">Present</span></span>
+          <span style="display:flex;align-items:center;gap:5px;"><span id="legendDot2" style="width:11px;height:11px;border-radius:50%;background:#e06b6b;display:inline-block;"></span><span id="legendLabel2" style="color:var(--offwhite);">Absent</span></span>
+        </div>
+        <div style="text-align:right;margin-top:6px;">
+          <button onclick="openChartMax()" style="background:none;border:none;color:var(--accent2);font-size:11px;font-weight:700;cursor:pointer;padding:0;">⛶ Expand</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== CHART MAXIMIZE PAGE ===== -->
+    <div class="page" id="pageChartMax" style="display:flex;flex-direction:column;overflow:hidden;padding:0;background:var(--royal);">
+      <!-- Top bar -->
+      <div style="background:var(--royal2);border-bottom:1px solid var(--border);padding:9px 14px;display:flex;align-items:center;gap:10px;flex-shrink:0;">
+        <button onclick="closeChartMax()" title="Back to Home"
+          style="background:var(--card2);border:1px solid var(--border);color:var(--offwhite);width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;flex-shrink:0;">‹</button>
+        <div style="font-size:14px;font-weight:700;color:var(--gold);flex:1;" id="chartMaxTitle">📊 Chart</div>
+      </div>
+      <!-- Controls row -->
+      <div style="padding:8px 14px;background:var(--royal2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-shrink:0;flex-wrap:wrap;">
+        <!-- Mode -->
+        <div style="display:flex;gap:3px;background:var(--royal);border-radius:8px;padding:3px;flex-shrink:0;">
+          <button id="chartMaxBtnAtt" onclick="setChartMaxMode('present')"
+            style="padding:4px 10px;border-radius:6px;border:none;font-size:11px;font-weight:700;cursor:pointer;background:var(--accent2);color:#fff;transition:all .15s;">Attendance</button>
+          <button id="chartMaxBtnJoin" onclick="setChartMaxMode('joined')"
+            style="padding:4px 10px;border-radius:6px;border:none;font-size:11px;font-weight:700;cursor:pointer;background:transparent;color:var(--gray);transition:all .15s;">Joined</button>
+        </div>
+        <!-- Months range -->
+        <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;">
+          <span style="font-size:10px;color:var(--gray);">Months:</span>
+          <select id="chartMaxMonths" onchange="renderChartMax()"
+            style="background:var(--card2);border:1px solid var(--border);border-radius:6px;color:var(--gold);font-size:11px;font-weight:700;padding:4px 6px;outline:none;cursor:pointer;">
+            <option value="3">3</option>
+            <option value="6" selected>6</option>
+            <option value="9">9</option>
+            <option value="12">12</option>
+          </select>
+        </div>
+        <!-- Year range -->
+        <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;">
+          <span style="font-size:10px;color:var(--gray);">Years:</span>
+          <select id="chartMaxYears" onchange="renderChartMax()"
+            style="background:var(--card2);border:1px solid var(--border);border-radius:6px;color:var(--gold);font-size:11px;font-weight:700;padding:4px 6px;outline:none;cursor:pointer;">
+            <option value="1" selected>1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select>
+        </div>
+      </div>
+      <!-- Canvas area -->
+      <div style="flex:1;display:flex;flex-direction:column;min-height:0;padding:10px 8px 6px;overflow:auto;">
+        <canvas id="chartMaxCanvas" style="display:block;"></canvas>
+      </div>
+      <!-- Legend -->
+      <div style="display:flex;gap:14px;justify-content:center;padding:6px 0 10px;font-size:11px;color:var(--gray);flex-shrink:0;">
+        <span id="chartMaxLeg1" style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:2px;background:#22c55e;display:inline-block;"></span>Attended</span>
+        <span id="chartMaxLeg2" style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:2px;background:#f97316;display:inline-block;"></span>Not Attended</span>
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:2px;background:#fff;display:inline-block;"></span>Avg</span>
+      </div>
+    </div>
+
+    <!-- ===== STUDENTS ===== -->
+    <div class="page" id="pageStudents" style="display:flex;flex-direction:column;overflow:hidden;padding-bottom:0;">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+        <div style="display:flex;flex-direction:column;align-items:flex-start;gap:4px;flex-shrink:0;">
+          <div class="section-title" style="margin-bottom:0;white-space:nowrap;">👥 Students</div>
+          <div id="studentLimitBadge" style="font-size:11px;font-weight:600;padding:2px 9px;border-radius:12px;background:var(--card2);color:var(--gray);white-space:nowrap;"></div>
+        </div>
+        <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap;justify-content:flex-end;">
+          <button class="btn btn-gold btn-sm" onclick="gatedFeature('reports','downloadStudents',['pdf'])">PDF</button>
+          <button class="btn btn-success btn-sm" onclick="gatedFeature('reports','downloadStudents',['xl'])">XL</button>
+          <button class="btn btn-outline btn-sm" onclick="gatedFeature('bulk_import','openImportModal',[])" title="Import students from CSV/Excel">⬆️ Import</button>
+          <button class="btn btn-primary btn-sm" onclick="openAddStudentModal()">+ Add</button>
+        </div>
+      </div>
+
+      <!-- SEARCH + FILTERS (auto-hides on scroll down, reappears on scroll up) -->
+      <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:8px;">
+        <!-- Search box — always visible, never hides on scroll -->
+        <div class="search-wrap" style="margin-bottom:0;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" class="search-input" placeholder="Search by name or roll number…" id="studentSearch" oninput="renderStudentList(); toggleSearchClearBtn('studentSearch','studentSearchClearBtn')">
+          <button type="button" class="search-clear-btn" id="studentSearchClearBtn" onclick="clearSearchField('studentSearch','studentSearchClearBtn'); renderStudentList()" aria-label="Clear search">✕</button>
+        </div>
+        <!-- Filter row — collapses on scroll-down, reappears on scroll-up -->
+        <div id="studentSearchFilterWrap" style="overflow:hidden;max-height:60px;opacity:1;transition:max-height .25s ease, opacity .2s ease, margin-bottom .25s ease;">
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <select id="studentSportFilter" onchange="onStudentSportFilterChange()" class="form-select" style="flex:1;min-width:110px;font-size:12px;padding:7px 9px;">
+              <option value="">All Sports</option>
+            </select>
+            <select id="filterStudentBatch" onchange="renderStudentList()" class="form-select" style="flex:1;min-width:110px;font-size:12px;padding:7px 9px;">
+              <option value="">All Batches</option>
+            </select>
+            <select id="studentSortBy" onchange="renderStudentList()" class="form-select" style="flex:1;min-width:120px;font-size:12px;padding:7px 9px;">
+              <option value="roll_asc">Roll No ↑</option>
+              <option value="roll_desc">Roll No ↓</option>
+              <option value="name_az">Name A→Z</option>
+              <option value="name_za">Name Z→A</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hidden stubs kept for legacy JS compatibility -->
+      <div style="display:none;">
+        <span id="studentFilterActiveIndicator"></span>
+        <span id="studentFilterChevron"></span>
+        <button id="studentFilterToggleBtn"></button>
+        <div id="studentFilterBody"><input type="text" id="filterStudentName"><input type="text" id="filterStudentSchool"></div>
+        <div id="studentBatchChips"></div>
+      </div>
+
+      <!-- MULTI-SELECT TOOLBAR -->
+      <div id="studentSelectToolbar" style="display:none;background:var(--accent);border:1px solid var(--accent2);border-radius:10px;padding:9px 12px;margin-bottom:8px;display:none;align-items:center;gap:8px;flex-wrap:wrap;">
+        <div style="flex:1;font-size:13px;font-weight:700;color:var(--gold);">
+          <span id="selectedCountLabel">0</span> selected
+        </div>
+        <button class="btn btn-xs btn-outline" onclick="selectAllStudents()" style="font-size:11px;">✅ Select All</button>
+        <button class="btn btn-xs btn-outline" onclick="clearStudentSelection()" style="font-size:11px;">✕ Deselect All</button>
+        <button class="btn btn-xs btn-outline" onclick="openBulkEditModal()" style="font-size:11px;">✏️ Bulk Edit</button>
+        <button class="btn btn-xs" onclick="bulkDeleteStudents()" style="font-size:11px;background:var(--red);color:#fff;border:none;">🗑️ Delete</button>
+      </div>
+
+      <div id="studentListWrap" style="flex:1;overflow-y:auto;overflow-x:hidden;min-height:0;padding-bottom:90px;margin-top:4px;" onscroll="handleStudentListScroll(this)"></div>
+    </div>
+
+    <!-- ===== ATTENDANCE ===== -->
+    <div class="page" id="pageAttendance" style="display:flex;flex-direction:column;overflow:hidden;padding-bottom:0;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;position:relative;">
+        <div class="section-title" style="margin-bottom:0;">📅 Attendance</div>
+        <div style="display:flex;gap:5px;align-items:center;">
+          <button class="btn btn-gold btn-sm" onclick="gatedFeature('reports','downloadAttendance',['pdf'])">PDF</button>
+          <button class="btn btn-success btn-sm" onclick="gatedFeature('reports','downloadAttendance',['xl'])">XL</button>
+          <button class="btn btn-outline btn-sm" onclick="gatedFeature('bulk_import','openAttImportModal',[])" title="Import attendance from CSV/Excel">⬆️ Import</button>
+          <button onclick="openAttChart()" title="Attendance chart" aria-label="Attendance chart"
+            style="width:32px;height:32px;border-radius:9px;background:var(--accent2);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,.15);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- SEARCH + FILTERS (auto-hides on scroll down, reappears on scroll up) -->
+      <!-- Search box — always visible, never hides on scroll -->
+      <div class="search-wrap" style="margin-bottom:7px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" class="search-input" placeholder="Search by name or roll number…" id="attSearch" oninput="renderAttendance(); toggleSearchClearBtn('attSearch','attSearchClearBtn')">
+        <button type="button" class="search-clear-btn" id="attSearchClearBtn" onclick="clearSearchField('attSearch','attSearchClearBtn'); renderAttendance()" aria-label="Clear search">✕</button>
+      </div>
+
+      <!-- Sport | Batch | Sort row — collapses on scroll-down, reappears on scroll-up -->
+      <div id="attSearchFilterWrap" style="overflow:hidden;max-height:60px;opacity:1;transition:max-height .25s ease, opacity .2s ease, margin-bottom .25s ease;margin-bottom:7px;">
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <select id="attSportSelect" onchange="onAttSportChange()" class="form-select" style="flex:1;min-width:110px;font-size:12px;padding:7px 9px;"></select>
+          <select id="attBatchFilter" onchange="onAttBatchFilterChange()" class="form-select" style="flex:1;min-width:110px;font-size:12px;padding:7px 9px;">
+            <option value="ALL">All Batches</option>
+          </select>
+          <select id="attSortBy" onchange="renderAttendance()" class="form-select" style="flex:1;min-width:120px;font-size:12px;padding:7px 9px;">
+            <option value="roll_asc">Roll No ↑</option>
+            <option value="roll_desc">Roll No ↓</option>
+            <option value="name_az">Name A→Z</option>
+            <option value="name_za">Name Z→A</option>
+            <option value="present_first">✅ Present First</option>
+            <option value="absent_first">❌ Absent First</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Date navigator — collapsible (Day / Month / Year) -->
+      <div style="margin-bottom:8px;">
+        <button onclick="toggleAttDateNav()" id="attDateNavToggleBtn"
+          style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--offwhite);font-size:12px;font-weight:700;cursor:pointer;transition:border-color .2s;">
+          <span style="display:flex;align-items:center;gap:6px;">
+            📅 <span id="attDateNavLabel2" style="color:var(--gold);">— —</span>
+            <span id="attViewBadge" style="background:var(--accent2);color:#fff;border-radius:5px;padding:1px 7px;font-size:10px;font-weight:700;">Day</span>
+          </span>
+          <span id="attDateNavChevron" style="font-size:11px;color:var(--gray);transition:transform .2s;">▼</span>
+        </button>
+        <div id="attDateNavBody" style="display:none;background:var(--card);border:1px solid var(--border);border-top:none;border-radius:0 0 10px 10px;padding:10px;">
+          <!-- Hidden selects for JS value storage -->
+          <select id="attYear"  onchange="onAttFilterChange()" style="display:none;"></select>
+          <select id="attMonth" onchange="onAttFilterChange()" style="display:none;"></select>
+          <!-- Row 1: Date | Month | Year -->
+          <div style="display:flex;align-items:center;gap:4px;margin-bottom:6px;">
+            <button class="arrow-btn" onclick="navAtt('date',-1)" style="width:26px;height:26px;flex-shrink:0;">‹</button>
+            <select id="attDate" onchange="onAttFilterChange()"
+              style="background:var(--card2);border:1px solid var(--border);border-radius:7px;color:var(--gold);font-size:12px;font-weight:700;padding:5px 3px;text-align:center;outline:none;flex:1;cursor:pointer;"></select>
+            <button class="arrow-btn" onclick="navAtt('date',1)" style="width:26px;height:26px;flex-shrink:0;">›</button>
+            <div style="width:1px;height:20px;background:var(--border);flex-shrink:0;"></div>
+            <button class="arrow-btn" onclick="navAtt('month',-1)" style="width:26px;height:26px;flex-shrink:0;">‹</button>
+            <select id="attMonthDisplay" onchange="onAttMonthDisplayChange()"
+              style="background:var(--card2);border:1px solid var(--border);border-radius:7px;color:var(--gold);font-size:12px;font-weight:700;padding:5px 3px;text-align:center;outline:none;flex:1.5;cursor:pointer;"></select>
+            <button class="arrow-btn" onclick="navAtt('month',1)" style="width:26px;height:26px;flex-shrink:0;">›</button>
+            <div style="width:1px;height:20px;background:var(--border);flex-shrink:0;"></div>
+            <button class="arrow-btn" onclick="navAtt('year',-1)" style="width:26px;height:26px;flex-shrink:0;">‹</button>
+            <select id="attYearDisplay" onchange="onAttYearDisplayChange()"
+              style="background:var(--card2);border:1px solid var(--border);border-radius:7px;color:var(--gold);font-size:12px;font-weight:700;padding:5px 3px;text-align:center;outline:none;flex:1;cursor:pointer;"></select>
+            <button class="arrow-btn" onclick="navAtt('year',1)" style="width:26px;height:26px;flex-shrink:0;">›</button>
+          </div>
+          <!-- Row 2: View type buttons -->
+          <div style="display:flex;gap:6px;">
+            <button id="attViewDay" onclick="setAttView('day')"
+              style="flex:1;padding:6px 0;border-radius:7px;border:1px solid var(--accent2);background:var(--accent2);color:#fff;font-size:12px;font-weight:700;cursor:pointer;">📅 Day</button>
+            <button id="attViewMonth" onclick="setAttView('month')"
+              style="flex:1;padding:6px 0;border-radius:7px;border:1px solid var(--border);background:var(--card2);color:var(--offwhite);font-size:12px;font-weight:700;cursor:pointer;">📆 Month</button>
+            <button id="attViewYear" onclick="setAttView('year')"
+              style="flex:1;padding:6px 0;border-radius:7px;border:1px solid var(--border);background:var(--card2);color:var(--offwhite);font-size:12px;font-weight:700;cursor:pointer;">🗓️ Year</button>
+            <select id="attViewType" onchange="renderAttendance()" style="display:none;">
+              <option value="day">Day</option>
+              <option value="month">Month</option>
+              <option value="year">Year</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hidden compat elements -->
+      <select id="attStatusFilter" style="display:none;"><option value="all">All Status</option><option value="present">Present</option><option value="absent">Absent</option></select>
+      <div class="batch-chips" id="attBatchChips" style="display:none;"></div>
+      <div id="attSummaryBar"></div>
+      <div id="attListWrap" style="flex:1;overflow-y:auto;overflow-x:hidden;min-height:0;padding-bottom:90px;" onscroll="updateScrollArrow('attListWrap','attScrollArrow'); handleAttListScroll(this)"></div>
+      <button id="attScrollArrow" onclick="scrollListBottom('attListWrap')" title="Scroll to bottom" aria-label="Scroll to bottom"
+        style="position:absolute;bottom:78px;left:50%;transform:translateX(-50%);width:34px;height:34px;border-radius:50%;background:var(--card);color:var(--accent2);border:1px solid var(--border);cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.18);z-index:20;display:flex;align-items:center;justify-content:center;padding:0;transition:opacity .2s;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+    </div>
+
+    <!-- ===== FEES ===== -->
+    <div class="page" id="pageFees" style="display:flex;flex-direction:column;overflow:hidden;padding-bottom:0;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div class="section-title" style="margin-bottom:0;">💰 Fee Payments</div>
+        <div style="display:flex;gap:5px;align-items:center;">
+          <button class="btn btn-gold btn-sm" onclick="gatedFeature('reports','downloadFees',['pdf'])">PDF</button>
+          <button class="btn btn-success btn-sm" onclick="gatedFeature('reports','downloadFees',['xl'])">XL</button>
+          <button class="btn btn-outline btn-sm" onclick="gatedFeature('bulk_import','openFeeImportModal',[])" title="Import fees from CSV/Excel">⬆️ Import</button>
+          <button onclick="openFeeChart()" title="Fees chart" aria-label="Fees chart"
+            style="width:32px;height:32px;border-radius:9px;background:var(--accent2);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,.15);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Search box — always visible, never hides on scroll -->
+      <div class="search-wrap" style="margin-bottom:7px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" class="search-input" placeholder="Search by name or roll number…" id="feeSearch" oninput="renderFees(); toggleSearchClearBtn('feeSearch','feeSearchClearBtn')">
+        <button type="button" class="search-clear-btn" id="feeSearchClearBtn" onclick="clearSearchField('feeSearch','feeSearchClearBtn'); renderFees()" aria-label="Clear search">✕</button>
+      </div>
+
+      <!-- Sport | Batch | Payment status | Sort row — collapses on scroll-down, reappears on scroll-up -->
+      <div id="feeSearchFilterWrap" style="overflow:hidden;max-height:60px;opacity:1;transition:max-height .25s ease, opacity .2s ease, margin-bottom .25s ease;margin-bottom:7px;">
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <select id="feeSportSelect" onchange="onFeeSportChange()" class="form-select" style="flex:1;min-width:100px;font-size:12px;padding:7px 9px;"></select>
+          <select id="feeBatchFilter" onchange="onFeeBatchFilterChange()" class="form-select" style="flex:1;min-width:100px;font-size:12px;padding:7px 9px;">
+            <option value="ALL">All Batches</option>
+          </select>
+          <select id="feeStatusFilter" onchange="renderFees()" class="form-select" style="flex:1;min-width:100px;font-size:12px;padding:7px 9px;">
+            <option value="all">All Status</option>
+            <option value="paid">Paid</option>
+            <option value="unpaid">Unpaid</option>
+          </select>
+          <select id="feeSortBy" onchange="renderFees()" class="form-select" style="flex:1;min-width:120px;font-size:12px;padding:7px 9px;">
+            <option value="roll_asc">Roll No ↑</option>
+            <option value="roll_desc">Roll No ↓</option>
+            <option value="name_az">Name A→Z</option>
+            <option value="name_za">Name Z→A</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Date navigator — collapsible (Month / Year) -->
+      <div style="margin-bottom:8px;">
+        <button onclick="toggleFeeNav()" id="feeNavToggleBtn"
+          style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--offwhite);font-size:12px;font-weight:700;cursor:pointer;transition:border-color .2s;">
+          <span style="display:flex;align-items:center;gap:6px;">
+            💰 <span id="feeNavLabel2" style="color:var(--gold);">— —</span>
+            <span id="feeModeBadge" style="background:var(--accent2);color:#fff;border-radius:5px;padding:1px 7px;font-size:10px;font-weight:700;">Monthly</span>
+          </span>
+          <span id="feeNavChevron" style="font-size:11px;color:var(--gray);transition:transform .2s;">▼</span>
+        </button>
+        <div id="feeNavBody" style="display:none;background:var(--card);border:1px solid var(--border);border-top:none;border-radius:0 0 10px 10px;padding:10px;">
+          <!-- Hidden selects for JS value storage -->
+          <select id="feeMonth"    onchange="renderFees()" style="display:none;"></select>
+          <select id="feeYear"     onchange="renderFees()" style="display:none;"></select>
+          <select id="feeYearOnly" onchange="renderFees()" style="display:none;"></select>
+          <!-- Row 1: Month | Year -->
+          <div style="display:flex;align-items:center;gap:4px;margin-bottom:6px;">
+            <span id="feeMonthNavBtns" style="display:contents;">
+              <button class="arrow-btn" onclick="navFee('month',-1)" style="width:26px;height:26px;flex-shrink:0;">‹</button>
+              <select id="feeMonthDisplay" onchange="onFeeMonthDisplayChange()"
+                style="background:var(--card2);border:1px solid var(--border);border-radius:7px;color:var(--gold);font-size:12px;font-weight:700;padding:5px 3px;text-align:center;outline:none;flex:1.5;cursor:pointer;"></select>
+              <button class="arrow-btn" onclick="navFee('month',1)" style="width:26px;height:26px;flex-shrink:0;">›</button>
+              <div id="feeMonthDivider" style="width:1px;height:20px;background:var(--border);flex-shrink:0;"></div>
+            </span>
+            <button class="arrow-btn" onclick="navFee('year',-1)" style="width:26px;height:26px;flex-shrink:0;">‹</button>
+            <select id="feeYearDisplay" onchange="onFeeYearDisplayChange()"
+              style="background:var(--card2);border:1px solid var(--border);border-radius:7px;color:var(--gold);font-size:12px;font-weight:700;padding:5px 3px;text-align:center;outline:none;flex:1;cursor:pointer;"></select>
+            <button class="arrow-btn" onclick="navFee('year',1)" style="width:26px;height:26px;flex-shrink:0;">›</button>
+          </div>
+          <!-- Row 2: Mode toggle -->
+          <div style="display:flex;gap:6px;">
+            <button id="feeFilterMonthBtn" onclick="setFeeFilterMode('month')"
+              style="flex:1;padding:6px 0;border-radius:7px;border:1px solid var(--accent2);background:var(--accent2);color:#fff;font-size:12px;font-weight:700;cursor:pointer;">📅 Monthly</button>
+            <button id="feeFilterYearBtn" onclick="setFeeFilterMode('year')"
+              style="flex:1;padding:6px 0;border-radius:7px;border:1px solid var(--border);background:var(--card2);color:var(--offwhite);font-size:12px;font-weight:700;cursor:pointer;">📆 Yearly</button>
+          </div>
+          <select id="feeYearOnlyDisplay" onchange="onFeeYearOnlyDisplayChange()" style="display:none;"></select>
+          <div id="feeMonthFilter" style="display:none;"></div>
+          <div id="feeYearFilter"  style="display:none;"></div>
+        </div>
+      </div>
+
+      <!-- Hidden compat -->
+      <div class="batch-chips" id="feeBatchChips" style="display:none;"></div>
+      <div id="feeListWrap" style="flex:1;overflow-y:auto;overflow-x:hidden;min-height:0;padding-bottom:90px;" onscroll="handleFeeListScroll(this)"></div>
+    </div>
+
+    <!-- ===== ENQUIRY / QUERIES ===== -->
+    <div class="page" id="pageEnquiry">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div class="section-title" style="margin-bottom:0;">💬 Queries</div>
+        <button class="btn btn-primary btn-sm" onclick="openAddEnquiryModal()">+ Add</button>
+      </div>
+      <!-- Search first -->
+      <div class="search-wrap" style="margin-bottom:7px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" class="search-input" placeholder="Search by name or phone…" id="enquirySearch" oninput="renderEnquiryList(); toggleSearchClearBtn('enquirySearch','enquirySearchClearBtn')">
+        <button type="button" class="search-clear-btn" id="enquirySearchClearBtn" onclick="clearSearchField('enquirySearch','enquirySearchClearBtn'); renderEnquiryList()" aria-label="Clear search">✕</button>
+      </div>
+      <!-- Ratio · Sport · Staff row -->
+      <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;">
+        <select class="form-select" id="enqFilterConversion" onchange="renderEnquiryList()" style="flex:1;min-width:100px;font-size:12px;padding:7px 9px;">
+          <option value="">All Ratios</option>
+          <option value="High">🔥 High</option>
+          <option value="Medium">⚡ Medium</option>
+          <option value="Low">❄️ Low</option>
+        </select>
+        <select class="form-select" id="enqFilterSport" onchange="renderEnquiryList()" style="flex:1;min-width:100px;font-size:12px;padding:7px 9px;">
+          <option value="">All Sports</option>
+        </select>
+        <select class="form-select" id="enqFilterStaff" onchange="renderEnquiryList()" style="flex:1;min-width:100px;font-size:12px;padding:7px 9px;display:none;">
+          <option value="">👥 All Staff</option>
+        </select>
+      </div>
+      <!-- Hidden compat (reminder-date filter + indicators kept so existing JS doesn't break) -->
+      <div style="display:none;">
+        <input type="date" id="enqFilterReminderDate" onchange="renderEnquiryList()">
+        <span id="enqFilterActiveIndicator"></span>
+        <span id="enqFilterChevron"></span>
+        <button id="enqFilterToggleBtn"></button>
+        <div id="enqFilterBody"></div>
+        <div id="enqStaffFilterRow"></div>
+      </div>
+      <!-- Active / Archive toggle (admin only) -->
+      <div id="enqViewToggle" style="display:none;gap:7px;margin-bottom:10px;">
+        <button class="batch-chip active" id="enqViewActiveBtn" onclick="setEnqView('active')">📋 Active</button>
+        <button class="batch-chip" id="enqViewArchiveBtn" onclick="setEnqView('archive')">🗄️ Archive</button>
+      </div>
+      <div id="enquiryListWrap"></div>
+    </div>
+
+    <!-- ===== ACTIVITY LOG ===== -->
+    <div class="page" id="pageActivity">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div class="section-title" style="margin-bottom:0;">📋 Activity Log</div>
+        <button class="btn btn-primary btn-sm" onclick="openClassLogAddModal()">+ Add</button>
+      </div>
+
+      <!-- Filter row -->
+      <div style="display:flex;gap:6px;margin-bottom:7px;flex-wrap:wrap;">
+        <select id="classLogFilterSport" onchange="onClassLogSportFilterChange()" class="form-select" style="flex:1;min-width:100px;padding:7px 10px;font-size:12px;">
+          <option value="">All Sports</option>
+        </select>
+        <select id="classLogFilterBatch" onchange="renderClassLog()" class="form-select" style="flex:1;min-width:100px;padding:7px 10px;font-size:12px;">
+          <option value="">All Batches</option>
+        </select>
+      </div>
+      <!-- Date view: Day / Month / Year -->
+      <div style="display:flex;gap:6px;margin-bottom:7px;align-items:center;flex-wrap:wrap;">
+        <select id="classLogViewType" onchange="onClassLogViewChange()" class="form-select" style="flex:0 0 auto;width:auto;padding:7px 10px;font-size:12px;">
+          <option value="day">📅 Day</option>
+          <option value="month" selected>📆 Month</option>
+          <option value="year">🗓️ Year</option>
+        </select>
+        <input type="date"  id="classLogFilterDate"  onchange="renderClassLog()" class="form-input" style="flex:1;min-width:120px;padding:7px 10px;font-size:12px;display:none;">
+        <input type="month" id="classLogFilterMonth" onchange="renderClassLog()" class="form-input" style="flex:1;min-width:120px;padding:7px 10px;font-size:12px;">
+        <select id="classLogFilterYear" onchange="renderClassLog()" class="form-select" style="flex:1;min-width:100px;padding:7px 10px;font-size:12px;display:none;"></select>
+      </div>
+
+      <!-- Log List -->
+      <div id="classLogList" style="padding-bottom:90px;">
+        <div class="empty-state" style="padding:20px;">No class entries yet.</div>
+      </div>
+    </div>
+
+    <!-- ===== PROFILE ===== -->
+    <div class="page" id="pageProfile">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <div class="section-title" style="margin-bottom:0;">👤 Profile</div>
+        <div style="display:flex;gap:6px;">
+          <button class="btn btn-outline btn-sm" onclick="openSettingsModal()" title="Settings">⚙️ Settings</button>
+          <button class="btn btn-danger btn-sm" onclick="doLogout()">Logout</button>
+        </div>
+      </div>
+
+      <!-- Academy Card -->
+      <div class="card">
+        <!-- View: logo + info + edit button -->
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div class="logo-img" id="profileLogo" style="width:60px;height:60px;font-size:26px;flex-shrink:0;">⚔️</div>
+          <div style="flex:1;min-width:0;">
+            <div style="font-weight:700;font-size:15px;line-height:1.3;" id="profileAcadName">Academy</div>
+            <div style="font-size:12px;color:var(--gray);margin-top:2px;" id="profileEmail"></div>
+            <div style="font-size:12px;color:var(--gray);" id="profilePhone"></div>
+            <div style="font-size:12px;color:var(--gray);" id="profilePhone2"></div>
+            <div style="font-size:11px;color:var(--graydk);margin-top:1px;" id="profileTagline"></div>
+          </div>
+          <button id="acadEditBtn" style="display:none;flex-shrink:0;background:var(--accent2);border:none;color:#fff;border-radius:8px;padding:7px 11px;font-size:12px;font-weight:700;cursor:pointer;" onclick="toggleAcadEdit()">✏️ Edit</button>
+        </div>
+
+        <!-- Edit Panel — shown only when Edit clicked -->
+        <div id="adminProfileFields" style="display:none;margin-top:14px;">
+          <div class="divider" style="margin-bottom:12px;"></div>
+
+          <!-- Logo -->
+          <div style="font-size:11px;font-weight:700;color:var(--gold);margin-bottom:8px;">🖼️ Academy Logo</div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+            <div class="logo-img" id="profileLogoEdit" style="width:52px;height:52px;font-size:22px;flex-shrink:0;">⚔️</div>
+            <label for="logoFileInput" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:var(--card2);border:1.5px dashed var(--accent2);border-radius:8px;padding:11px;font-size:13px;color:var(--gold);font-weight:700;cursor:pointer;">📂 Change Logo</label>
+            <input type="file" id="logoFileInput" accept="image/*" style="position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;opacity:0;" onchange="changeLogo(event)">
+          </div>
+
+          <!-- Text fields -->
+          <div class="form-group"><label class="form-label">Academy Name</label>
+            <input type="text" class="form-input" id="changeAcadInput" placeholder="Academy name">
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Email</label>
+              <input type="text" class="form-input" id="changeEmail" placeholder="email@example.com">
+            </div>
+            <div class="form-group"><label class="form-label">Phone</label>
+              <input type="text" class="form-input" id="changePhone" placeholder="+91 XXXXX">
+            </div>
+          </div>
+          <div class="form-group"><label class="form-label">Alternate Phone <span style="font-size:10px;color:var(--gray);">(optional)</span></label>
+            <input type="text" class="form-input" id="changePhone2" placeholder="+91 XXXXX">
+          </div>
+          <div class="form-group"><label class="form-label">Tagline / Subtitle</label>
+            <input type="text" class="form-input" id="changeTagline" placeholder="e.g. Admin & Staff Portal">
+          </div>
+          <div class="form-group"><label class="form-label">Login Page Support Line <span style="font-size:10px;color:var(--gray);">(shown at bottom of login)</span></label>
+            <input type="text" class="form-input" id="changeLoginSupport" placeholder="e.g. Support: name@email.com | +91 XXXXXXXXXX">
+          </div>
+
+          <div style="display:flex;gap:6px;margin-top:4px;">
+            <button class="btn btn-outline" style="flex:1;" onclick="toggleAcadEdit()">✕ Close</button>
+            <button class="btn btn-primary" style="flex:2;padding:11px;" onclick="saveAcadDetails()">💾 Save Changes</button>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Hidden elements kept for JS compatibility -->
+      <div id="syncIndicator" style="display:none;"></div>
+      <input type="file" id="importDataFile" accept=".json" style="display:none" onchange="importAllData(event)">
+      <div id="importDataStatus" style="display:none;"></div>
+      <div id="snapshotListWrap" style="display:none;"></div>
+
+      <!-- Sports & Batches — Admin only (split into 2 tabs) -->
+      <div class="card admin-only" id="sportBatchCard">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+          <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;">
+            <div class="section-title" style="margin-bottom:0;font-size:13px;">🏆 Sports & Batches</div>
+            <div id="sportLimitBadge"></div>
+            <div id="batchLimitBadge"></div>
+          </div>
+          <button class="btn btn-primary btn-xs" id="sportBatchMainBtn" onclick="openAddSportModal()">+ Sport</button>
+        </div>
+        <div style="display:flex;gap:6px;margin-bottom:12px;">
+          <button id="sbTabSports"  onclick="setSportBatchTab('sports')"  style="flex:1;padding:7px 0;border-radius:8px;border:none;font-size:12px;font-weight:700;cursor:pointer;background:var(--accent2);color:#fff;transition:all .15s;">🏆 Sports</button>
+          <button id="sbTabBatches" onclick="setSportBatchTab('batches')" style="flex:1;padding:7px 0;border-radius:8px;border:none;font-size:12px;font-weight:700;cursor:pointer;background:var(--card2);color:var(--gray);transition:all .15s;">📦 Batches</button>
+        </div>
+        <div id="sportBatchWrap" style="max-height:200px;overflow-y:auto;"></div>
+        <!-- Hidden legacy wrappers kept so older render calls don't error -->
+        <div id="sportListWrap" style="display:none;"></div>
+        <div id="batchListWrap" style="display:none;"></div>
+      </div>
+
+      <!-- User Management — Admin only -->
+      <div class="card" id="userCard">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <div style="display:flex;align-items:center;gap:7px;">
+            <div class="section-title" style="margin-bottom:0;font-size:12px;" id="userCardTitle">🔑 User Management</div>
+            <div id="staffLimitBadge"></div>
+          </div>
+          <button class="btn btn-primary btn-xs admin-only" onclick="openAddUserModal('staff')">+ Add Staff</button>
+        </div>
+        <!-- Admins / Staff sub-tabs — admin view only -->
+        <div class="admin-only user-mgmt-tabs" id="userMgmtTabs">
+          <button id="userTabAdmins" onclick="setUserMgmtTab('admins')"
+            style="flex:1;padding:7px 0;border-radius:8px;border:none;font-size:12px;font-weight:700;cursor:pointer;background:var(--accent2);color:#fff;transition:all .15s;">🛡️ Admins</button>
+          <button id="userTabStaff" onclick="setUserMgmtTab('staff')"
+            style="flex:1;padding:7px 0;border-radius:8px;border:none;font-size:12px;font-weight:700;cursor:pointer;background:var(--card2);color:var(--gray);transition:all .15s;">👥 Staff</button>
+        </div>
+        <div id="userListWrap" style="max-height:200px;overflow-y:auto;"></div>
+      </div>
+
+      <!-- Activity Log — Admin sees all (tabbed); Staff sees own log — moved to bottom -->
+      <div class="card admin-only" id="logCard">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:6px;flex-wrap:wrap;cursor:pointer;" onclick="toggleAcc('changeLogBody')">
+          <div class="section-title" style="margin-bottom:0;font-size:12px;">📋 Activity Log</div>
+          <div style="display:flex;gap:5px;align-items:center;" onclick="event.stopPropagation()">
+            <button class="btn btn-xs btn-outline" id="actCatBtn" onclick="toggleCatMenu('act')">🔽 Categories</button>
+            <button class="btn btn-xs btn-gold" onclick="exportActivityLog('pdf')">PDF</button>
+            <button class="btn btn-xs btn-success" onclick="exportActivityLog('xl')">XL</button>
+          </div>
+          <span id="logChevron" style="font-size:13px;color:var(--gray);transition:transform .2s;">▼</span>
+        </div>
+        <div class="accordion-content" id="changeLogBody" style="margin-bottom:0;">
+          <div id="actCatMenu" class="cat-menu" style="display:none;"></div>
+          <div id="changeLogWrap"></div>
+        </div>
+      </div>
+      <div class="card" id="staffLogCard" style="display:none;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <div class="section-title" style="margin-bottom:0;font-size:12px;">📋 My Activity</div>
+          <div style="display:flex;gap:5px;">
+            <button class="btn btn-xs btn-gold" onclick="exportActivityLog('pdf')">PDF</button>
+            <button class="btn btn-xs btn-success" onclick="exportActivityLog('xl')">XL</button>
+          </div>
+        </div>
+        <div id="staffLogWrap" style="max-height:200px;overflow-y:auto;"></div>
+      </div>
+
+      <!-- Default Fee Reminder Message — Admin only (collapsible) -->
+      <div class="card admin-only" id="defaultMsgCard">
+        <button class="accordion-btn" onclick="toggleAcc('feeReminderBody')" style="margin-bottom:0;border-radius:8px;">
+          <span style="font-size:12px;font-weight:700;color:var(--gold);">✅ Default Fee Reminder Message</span>
+          <span id="feeReminderChevron" style="font-size:13px;color:var(--gray);transition:transform .2s;">▼</span>
+        </button>
+        <div class="accordion-content" id="feeReminderBody" style="margin-bottom:0;margin-top:6px;">
+          <div style="font-size:11px;color:var(--gray);margin-bottom:8px;line-height:1.6;">
+            Use <b style="color:var(--gold);">{name}</b> for student name, <b style="color:var(--gold);">{month}</b> for fee month, <b style="color:var(--gold);">{academy}</b> for academy name.
+          </div>
+          <textarea class="form-input" id="profileMsgTemplate" rows="4" style="resize:none;line-height:1.7;margin-bottom:10px;"></textarea>
+          <button class="btn btn-primary btn-sm" style="width:100%;" onclick="saveProfileMsgTemplate()">💾 Save Message Template</button>
+        </div>
+      </div>
+
+      <!-- Payment Thank-You Message — Admin only (collapsible) -->
+      <div class="card admin-only" id="defaultThankCard">
+        <button class="accordion-btn" onclick="toggleAcc('thankBody')" style="margin-bottom:0;border-radius:8px;">
+          <span style="font-size:12px;font-weight:700;color:var(--gold);">🎉 Payment Thank-You Message</span>
+          <span id="thankChevron" style="font-size:13px;color:var(--gray);transition:transform .2s;">▼</span>
+        </button>
+        <div class="accordion-content" id="thankBody" style="margin-bottom:0;margin-top:6px;">
+          <div style="font-size:11px;color:var(--gray);margin-bottom:8px;line-height:1.6;">
+            Sent when a payment is recorded. Use <b style="color:var(--gold);">{name}</b> for student name, <b style="color:var(--gold);">{month}</b> for fee month, <b style="color:var(--gold);">{academy}</b> for academy name, <b style="color:var(--gold);">{amount}</b> for paid amount, <b style="color:var(--gold);">{method}</b> for payment method.
+          </div>
+          <textarea class="form-input" id="profileThankTemplate" rows="4" style="resize:none;line-height:1.7;margin-bottom:10px;"></textarea>
+          <button class="btn btn-primary btn-sm" style="width:100%;" onclick="saveProfileThankTemplate()">💾 Save Thank-You Template</button>
+        </div>
+      </div>
+
+      <!-- Message Log — all users see their own; admin sees all -->
+      <div class="card" id="msgLogCard">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:6px;flex-wrap:wrap;cursor:pointer;" onclick="toggleAcc('msgLogBody')">
+          <div class="section-title" style="margin-bottom:0;font-size:12px;">💰 Fees Log</div>
+          <div style="display:flex;gap:5px;align-items:center;" onclick="event.stopPropagation()">
+            <button class="btn btn-xs btn-outline" id="feeCatBtn" onclick="toggleFeeCatMenu()">🔽 Type</button>
+            <button class="btn btn-xs btn-gold" onclick="gatedFeature('reports','exportFeesLog',['pdf'])">PDF</button>
+            <button class="btn btn-xs btn-success" onclick="gatedFeature('reports','exportFeesLog',['xl'])">XL</button>
+          </div>
+          <span id="msgLogChevron" style="font-size:13px;color:var(--gray);transition:transform .2s;">▼</span>
+        </div>
+        <div class="accordion-content" id="msgLogBody" style="margin-bottom:0;">
+          <div id="feeCatMenu" class="cat-menu" style="display:none;"></div>
+          <!-- Reminder / Paid toggle -->
+          <div style="display:flex;gap:6px;margin-bottom:8px;">
+            <button id="feesLogTabReminder" onclick="setFeesLogTab('reminder')"
+              style="flex:1;padding:7px 0;border-radius:8px;border:none;font-size:12px;font-weight:700;cursor:pointer;background:var(--accent2);color:#fff;transition:all .15s;">💬 Fee Reminder</button>
+            <button id="feesLogTabPaid" onclick="setFeesLogTab('paid')"
+              style="flex:1;padding:7px 0;border-radius:8px;border:none;font-size:12px;font-weight:700;cursor:pointer;background:var(--card2);color:var(--gray);transition:all .15s;">✅ Fee Paid</button>
+          </div>
+          <div id="msgLogWrap" style="max-height:280px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;"></div>
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- ===== PERFORMANCE ===== -->
+    <div class="page" id="pagePerformance">
+      <div style="margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+        <div class="section-title" style="margin-bottom:0;">🏆 Performance</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button class="btn btn-xs btn-gold" style="font-size:12px;padding:6px 12px;" onclick="exportPerformance('pdf')">⬇️ PDF</button>
+          <button class="btn btn-xs btn-success" style="font-size:12px;padding:6px 12px;" onclick="exportPerformance('xl')">⬇️ XL</button>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="filter-bar" style="margin-bottom:10px;">
+        <div class="filter-row">
+          <select class="form-select" id="perfSportFilter" onchange="renderPerformancePage()" style="flex:1;font-size:12px;">
+            <option value="ALL">All Sports</option>
+          </select>
+          <select class="form-select" id="perfBatchFilter" onchange="renderPerformancePage()" style="flex:1;font-size:12px;">
+            <option value="ALL">All Batches</option>
+          </select>
+          <select class="form-select" id="perfSortBy" onchange="renderPerformancePage()" style="flex:1;font-size:12px;">
+            <option value="combined">Combined ↓</option>
+            <option value="pts_desc">Points ↓</option>
+            <option value="pts_asc">Points ↑</option>
+            <option value="att_desc">Attendance ↓</option>
+            <option value="att_asc">Attendance ↑</option>
+            <option value="name_az">Name A→Z</option>
+            <option value="name_za">Name Z→A</option>
+            <option value="roll_asc">Roll No ↑</option>
+            <option value="roll_desc">Roll No ↓</option>
+          </select>
+        </div>
+        <!-- Search row -->
+        <div class="filter-row" style="margin-top:7px;">
+          <div class="search-wrap" style="flex:1;min-width:0;margin-bottom:0;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" class="search-input" placeholder="Search student…" id="perfSearch" oninput="renderPerformancePage()" style="font-size:12px;padding:7px 9px 7px 32px;">
+          </div>
+        </div>
+      </div>
+
+      <!-- View toggle -->
+      <div style="display:flex;gap:6px;margin-bottom:10px;">
+        <button class="btn" id="perfViewLeaderboard" onclick="setPerfView('leaderboard')" style="flex:1;font-size:12px;padding:7px;">🏅 Leaderboard</button>
+        <button class="btn" id="perfViewSchedules"   onclick="setPerfView('schedules')"   style="flex:1;font-size:12px;padding:7px;">📋 Schedules</button>
+      </div>
+
+      <!-- Content area -->
+      <div id="perfContent"></div>
+    </div>
+
+
+    <!-- ===== SCHEDULES ===== -->
+    <div class="page" id="pageSchedules" style="padding-bottom:90px;">
+      <div style="margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+        <div class="section-title" style="margin-bottom:0;">📅 Schedules</div>
+        <div style="display:flex;gap:6px;">
+          <div id="schedPageAdminBtns" style="display:flex;gap:6px;">
+            <button class="btn btn-primary" style="font-size:12px;padding:6px 14px;" onclick="openNewTaskSchedule()">+ Assign Task</button>
+            <button class="btn btn-outline" style="font-size:12px;padding:6px 14px;" onclick="switchPage('leaveCount')">📊 Leave Count</button>
+          </div>
+          <button id="schedStaffLeaveBtn" class="btn" style="font-size:12px;padding:6px 14px;background:#f59e0b;color:#fff;border:none;display:none;" onclick="openApplyLeave()">🏖️ Apply Leave</button>
+          <button id="schedStaffLeaveCountBtn" class="btn btn-outline" style="font-size:12px;padding:6px 14px;display:none;" onclick="switchPage('leaveCount')">📊 Leave Count</button>
+        </div>
+      </div>
+
+      <!-- View toggle -->
+      <div style="display:flex;gap:6px;margin-bottom:10px;" id="schedViewToggle">
+        <button class="btn" id="schedViewMonth" onclick="setSchedView('month')" style="flex:1;font-size:12px;padding:7px;">🗓️ Month</button>
+        <button class="btn" id="schedViewDay"   onclick="setSchedView('day')"   style="flex:1;font-size:12px;padding:7px;">📆 Day</button>
+        <button class="btn" id="schedViewList"  onclick="setSchedView('list')" style="flex:1;font-size:12px;padding:7px;">📋 List</button>
+      </div>
+
+      <!-- Filters -->
+      <div style="margin-bottom:10px;" id="schedFilterBar">
+        <div id="schedStaffFilterWrap">
+          <select class="form-select" id="schedStaffFilter" onchange="renderSchedulesPage()" style="font-size:12px;width:100%;margin-bottom:6px;">
+            <option value="ALL">👥 All Staff</option>
+          </select>
+        </div>
+        <!-- Date range filter — only shown for List view -->
+        <div id="schedDateRangeBar" style="display:none;gap:6px;align-items:center;">
+          <input type="date" id="schedDateFrom" class="form-input" style="flex:1;font-size:12px;padding:7px 10px;" onchange="renderSchedulesPage()">
+          <span style="font-size:11px;color:var(--gray);flex-shrink:0;">to</span>
+          <input type="date" id="schedDateTo" class="form-input" style="flex:1;font-size:12px;padding:7px 10px;" onchange="renderSchedulesPage()">
+          <button class="btn btn-outline" style="font-size:11px;padding:6px 10px;flex-shrink:0;" onclick="clearSchedDateFilter()">✕</button>
+        </div>
+      </div>
+
+      <div id="schedPageContent"></div>
+    </div>
+
+    <!-- LEAVE COUNT PAGE -->
+    <div class="page" id="pageLeaveCount" style="padding-bottom:90px;">
+      <div style="margin-bottom:12px;display:flex;align-items:center;gap:10px;">
+        <button class="btn btn-outline" style="font-size:12px;padding:6px 12px;" onclick="switchPage('schedules')">← Back</button>
+        <div class="section-title" style="margin-bottom:0;">📊 Leave Count</div>
+      </div>
+
+      <!-- Summary cards -->
+      <div id="leaveCountSummary" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;"></div>
+
+      <!-- Filters -->
+      <div style="margin-bottom:10px;">
+        <div style="display:flex;gap:6px;margin-bottom:6px;">
+          <div id="leaveCountStaffFilterWrap" style="flex:1;min-width:0;">
+            <select class="form-select" id="leaveCountStaffFilter" onchange="renderLeaveCountPage()" style="font-size:12px;width:100%;">
+              <option value="ALL">👥 All Staff</option>
+            </select>
+          </div>
+          <select class="form-select" id="leaveCountStatusFilter" onchange="renderLeaveCountPage()" style="font-size:12px;flex:1;min-width:0;">
+            <option value="ALL">📋 All Status</option>
+            <option value="pending">🟡 Pending</option>
+            <option value="approved">🟢 Approved</option>
+            <option value="rejected">🔴 Rejected</option>
+          </select>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <input type="date" id="leaveCountDateFrom" class="form-input" style="flex:1;font-size:12px;padding:7px 10px;" onchange="renderLeaveCountPage()">
+          <span style="font-size:11px;color:var(--gray);flex-shrink:0;">to</span>
+          <input type="date" id="leaveCountDateTo" class="form-input" style="flex:1;font-size:12px;padding:7px 10px;" onchange="renderLeaveCountPage()">
+          <button class="btn btn-outline" style="font-size:11px;padding:6px 10px;flex-shrink:0;" onclick="clearLeaveCountDateFilter()">✕</button>
+        </div>
+      </div>
+
+      <div id="leaveCountList"></div>
+    </div>
+
+  </div><!-- end .content -->
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <button class="nav-item active" id="nav-home" onclick="switchPage('home')" title="Home" aria-label="Home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 2l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg>
+    </button>
+    <button class="nav-item" id="nav-students" onclick="switchPage('students')" title="Students" aria-label="Students">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    </button>
+    <button class="nav-item" id="nav-attendance" onclick="switchPage('attendance')" title="Attendance" aria-label="Attendance">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="m9 16 2 2 4-4"/></svg>
+    </button>
+    <button class="nav-item" id="nav-fees" onclick="switchPage('fees')" title="Fees" aria-label="Fees">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12a2 2 0 0 0 2 2h14v-4"/><path d="M18 12a2 2 0 0 0 0 4h4v-4z"/></svg>
+    </button>
+    <button class="nav-item" id="nav-enquiry" onclick="switchPage('enquiry')" title="Enquiry" aria-label="Enquiry">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-4.9 7.6 8.5 8.5 0 0 1-9.3-1.8L3 21l1.9-3.8a8.38 8.38 0 0 1-.9-3.7 8.5 8.5 0 0 1 8.5-8.5h.4a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+    </button>
+    <button class="nav-item" id="nav-profile" onclick="switchPage('profile')" title="Profile" aria-label="Profile">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </button>
+  </div>
+  <!-- Hidden nav stubs for JS compatibility (tabs only reachable via hamburger menu) -->
+  <div style="display:none;">
+    <button id="nav-activity"></button>
+  </div>
+  <div class="app-copyright">© 2026 FeeZo Solutions · v3</div>
+</div><!-- end #app -->
+
+<!-- ===== MODALS ===== -->
+
+
+<!-- ===== PERFORMANCE: ADD/EDIT SCHEDULE MODAL ===== -->
+<div class="modal-overlay" id="modalAddSchedule">
+  <div class="modal" style="max-width:500px;">
+    <div class="modal-title">
+      <span id="scheduleModalTitle">📋 New Schedule Set</span>
+      <button class="modal-close" onclick="closeModal('modalAddSchedule')">×</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Schedule Name</label>
+      <input type="text" class="form-input" id="schedName" placeholder="e.g. Physical Training">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Sport <span style="color:var(--red, #e33);">*</span></label>
+      <select class="form-select" id="schedSport" onchange="onSchedSportChange()"></select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Batch <span style="color:var(--red, #e33);">*</span></label>
+      <select class="form-select" id="schedBatch" disabled></select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Tasks</label>
+      <div id="schedTaskList" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px;"></div>
+      <button class="btn" style="font-size:12px;padding:6px 12px;background:var(--card2);width:100%;" onclick="addScheduleTaskRow()">+ Add Task</button>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:4px;">
+      <button class="btn" style="flex:1;background:var(--card2);" onclick="closeModal('modalAddSchedule')">Cancel</button>
+      <button class="btn btn-primary" style="flex:1;" onclick="saveSchedule()">💾 Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PERFORMANCE: GIVE MARKS MODAL ===== -->
+<div class="modal-overlay" id="modalGiveMarks">
+  <div class="modal" style="max-width:520px;">
+    <div class="modal-title">
+      <span>✏️ Give Marks</span>
+      <button class="modal-close" onclick="closeModal('modalGiveMarks')">×</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Schedule Set</label>
+      <select class="form-select" id="markScheduleSel" onchange="renderMarkStudentList()"></select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Batch</label>
+      <select class="form-select" id="markBatchSel" onchange="renderMarkStudentList()"></select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Sort By</label>
+      <select class="form-select" id="markSortSel" onchange="renderMarkStudentList()">
+        <option value="az">Name: A → Z</option>
+        <option value="za">Name: Z → A</option>
+        <option value="high">Points: High → Low</option>
+        <option value="low">Points: Low → High</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">🔍 Search Student</label>
+      <input type="text" class="form-input" id="markSearchInput" placeholder="Search by name or roll number..." oninput="renderMarkStudentList()">
+    </div>
+    <div id="markStudentList" style="max-height:55vh;overflow-y:auto;"></div>
+    <div style="display:flex;gap:8px;margin-top:10px;">
+      <button class="btn" style="flex:1;background:var(--card2);" onclick="closeModal('modalGiveMarks')">Cancel</button>
+      <button class="btn btn-primary" style="flex:1;" onclick="saveMarks()">💾 Save Marks</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalPerfWeights">
+  <div class="modal" style="max-width:340px;">
+    <div class="modal-title">
+      <span>🏆 Combined Rank Weighting</span>
+      <button class="modal-close" onclick="closeModal('modalPerfWeights')">×</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Points weight (%)</label>
+      <input type="number" class="form-input" id="perfWeightPoints" min="0" max="100" oninput="_syncPerfWeightInputs('points')">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Attendance weight (%)</label>
+      <input type="number" class="form-input" id="perfWeightAttendance" min="0" max="100" oninput="_syncPerfWeightInputs('attendance')">
+    </div>
+    <div style="font-size:11px;color:var(--gray);margin-bottom:10px;">Must add up to 100%.</div>
+    <div style="display:flex;gap:8px;">
+      <button class="btn" style="flex:1;background:var(--card2);" onclick="closeModal('modalPerfWeights')">Cancel</button>
+      <button class="btn btn-primary" style="flex:1;" onclick="savePerfWeights()">💾 Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PERFORMANCE: VIEW STUDENT SCORES MODAL ===== -->
+<div class="modal-overlay" id="modalStudentScores">
+  <div class="modal" style="max-width:480px;">
+    <div class="modal-title">
+      <span id="studentScoresTitle">📊 Student Scores</span>
+      <button class="modal-close" onclick="closeModal('modalStudentScores')">×</button>
+    </div>
+    <div id="studentScoresBody" style="max-height:65vh;overflow-y:auto;"></div>
+    <div id="studentScoresSaveBar" style="display:none;margin-top:10px;">
+      <button class="btn btn-primary" style="width:100%;" onclick="saveStudentScores()">💾 Save Marks</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- CHANGE MY PASSWORD -->
+<div class="modal-overlay" id="modalMyPass">
+  <div class="modal">
+    <div class="modal-title"><span>🔑 Change My Password</span><button class="modal-close" onclick="closeModal('modalMyPass')">×</button></div>
+    <div class="form-group"><label class="form-label">New Password <span style="color:var(--gray);font-size:10px;">(min 6 characters)</span></label><input type="password" class="form-input" id="myPassNew" placeholder="Enter new password"></div>
+    <div class="form-group"><label class="form-label">Confirm New Password</label><input type="password" class="form-input" id="myPassConfirm" placeholder="Re-enter new password"></div>
+    <div id="myPassError" style="display:none;color:var(--red);font-size:12px;margin-bottom:10px;"></div>
+    <button class="btn btn-primary" style="width:100%;padding:12px;" onclick="doChangeMyPassword()">💾 Update Password</button>
+  </div>
+</div>
+
+<!-- STUDENT DETAIL POPUP -->
+<div class="modal-overlay" id="modalStudentDetail">
+  <div class="modal">
+    <div class="modal-title"><span>👤 Student Details</span><button class="modal-close" onclick="closeModal('modalStudentDetail')">×</button></div>
+    <div id="studentDetailBody"></div>
+  </div>
+</div>
+
+<!-- ADD / EDIT STUDENT -->
+<div class="modal-overlay" id="modalStudent">
+  <div class="modal">
+    <div class="modal-title"><span id="modalStudentTitle">Add Student</span><button class="modal-close" onclick="closeModal('modalStudent')">×</button></div>
+    <div class="form-row">
+      <div class="form-group" style="flex:1;"><label class="form-label">Roll Number</label><input type="text" class="form-input" id="sRollNo" placeholder="Auto-assigned" maxlength="12" style="text-transform:uppercase;" oninput="_rollAutoFilled=false;"></div>
+      <div class="form-group" style="flex:2;"><label class="form-label">Full Name *</label><input type="text" class="form-input" id="sName" placeholder="Student full name"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Date of Birth</label><input type="text" class="form-input" id="sDob" placeholder="DD/MM/YYYY" inputmode="numeric" maxlength="10" oninput="dobAutoFormat(this)" onkeydown="dobKeyDown(event,this)"></div>
+      <div class="form-group"><label class="form-label">Age <span id="sAgeAuto" style="font-size:10px;color:var(--gold);"></span></label><input type="number" class="form-input" id="sAge" placeholder="Auto-calculated" min="1" max="100" readonly style="background:var(--card2);opacity:.8;cursor:not-allowed;"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Parent / Guardian Name</label><input type="text" class="form-input" id="sParent" placeholder="Parent name"></div>
+    <div class="form-group"><label class="form-label">Contact Number 1 *</label><input type="tel" class="form-input" id="sContact" placeholder="Primary mobile"></div>
+    <div class="form-group"><label class="form-label">Contact Number 2</label><input type="tel" class="form-input" id="sContact2" placeholder="Secondary mobile (optional)"></div>
+    <div class="form-group"><label class="form-label">School Name</label><input type="text" class="form-input" id="sAddress" placeholder="School / College name"></div>
+    <div class="form-group"><label class="form-label">Joining Date *</label><input type="text" class="form-input" id="sJoinDate" placeholder="DD/MM/YYYY"></div>
+
+    <!-- SPORT + BATCH ENROLLMENT -->
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Sport</label><select class="form-select" id="enrollSportPick" onchange="onEnrollSportPick()"></select></div>
+      <div class="form-group"><label class="form-label">Batch</label><select class="form-select" id="enrollBatchPick" onchange="onEnrollBatchPick()"></select></div>
+    </div>
+    <div id="enrollRows" style="margin-bottom:10px;"></div>
+    <div id="convertFromEnqNote" style="display:none;background:#16a34a22;border:1px solid #16a34a55;color:#4ade80;border-radius:8px;padding:9px 12px;margin-bottom:10px;font-size:12px;line-height:1.5;"></div>
+    <button class="btn btn-primary" style="width:100%;padding:12px;" onclick="saveStudent()">💾 Save Student</button>
+  </div>
+</div>
+
+<!-- IMPORT STUDENTS -->
+<div class="modal-overlay" id="modalImport">
+  <div class="modal">
+    <div class="modal-title">⬆️ Import Students<button class="modal-close" onclick="closeModal('modalImport')">×</button></div>
+    <div style="background:var(--card2);border-radius:8px;padding:12px;margin-bottom:12px;font-size:12px;color:var(--gray);line-height:1.7;">
+      <div style="font-weight:700;color:var(--gold);margin-bottom:6px;">📋 Required CSV/Excel format:</div>
+      <div style="font-family:monospace;font-size:11px;background:var(--royal);padding:8px;border-radius:6px;margin-bottom:8px;overflow-x:auto;white-space:nowrap;">Name, RollNo, Sport, Batch, DOB, Parent, Contact, Contact2, School, JoinDate</div>
+      <div>• <b>Name</b> is required. All other columns optional and can be in any order.</div>
+      <div>• DOB &amp; JoinDate format: <b>DD/MM/YYYY</b>. Age is calculated automatically from DOB.</div>
+      <div>• Matching an existing student by Name + DOB + Parent name + a matching Contact number updates their details instead of duplicating them.</div>
+      <div>• First row treated as header and skipped.</div>
+    </div>
+    <input type="file" id="importFileInput" accept=".csv,.xlsx,.xls" style="display:none" onchange="handleImportFile(event)">
+    <button class="btn btn-gold" style="width:100%;padding:12px;margin-bottom:8px;" onclick="downloadImportTemplate()">📄 Download Excel Template</button>
+    <button class="btn btn-outline" style="width:100%;padding:12px;margin-bottom:10px;" onclick="document.getElementById('importFileInput').click()">📂 Choose CSV or Excel File</button>
+    <div id="importError" style="display:none;color:#f87171;font-size:12px;padding:8px;background:#f8717120;border-radius:6px;"></div>
+  </div>
+</div>
+
+<!-- STUDENT IMPORT REVIEW / SUBMIT -->
+<div class="modal-overlay" id="modalImportResults">
+  <div class="modal">
+    <div class="modal-title">📋 Review Import<button class="modal-close" onclick="closeModal('modalImportResults')">×</button></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;" id="importResultTabs">
+      <button class="btn btn-outline btn-sm att-res-tab" id="importResTabBtn-insert" onclick="showImportResultList('insert')" style="padding:10px 6px;">✅ Insert<br><span style="font-size:16px;font-weight:800;" id="importResCount-insert">0</span></button>
+      <button class="btn btn-outline btn-sm att-res-tab" id="importResTabBtn-update" onclick="showImportResultList('update')" style="padding:10px 6px;">🔄 Update<br><span style="font-size:16px;font-weight:800;" id="importResCount-update">0</span></button>
+      <button class="btn btn-outline btn-sm att-res-tab" id="importResTabBtn-skip" onclick="showImportResultList('skip')" style="padding:10px 6px;">⏭️ Skip<br><span style="font-size:16px;font-weight:800;" id="importResCount-skip">0</span></button>
+      <button class="btn btn-outline btn-sm att-res-tab" id="importResTabBtn-reject" onclick="showImportResultList('reject')" style="padding:10px 6px;">❌ Rejected<br><span style="font-size:16px;font-weight:800;" id="importResCount-reject">0</span></button>
+    </div>
+    <div style="font-size:12px;font-weight:700;color:var(--gold);margin-bottom:6px;" id="importResultListLabel"></div>
+    <div style="max-height:320px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;" id="importResultListBody"></div>
+    <div style="display:flex;gap:8px;margin-top:12px;">
+      <button class="btn btn-outline" style="flex:1;" onclick="closeModal('modalImportResults')">Cancel</button>
+      <button class="btn btn-primary" style="flex:2;" id="importSubmitBtn" onclick="submitImportAll()">✅ Confirm &amp; Apply</button>
+    </div>
+  </div>
+</div>
+
+<!-- ATTENDANCE IMPORT -->
+<div class="modal-overlay" id="modalAttImport">
+
+  <div class="modal">
+    <div class="modal-title">⬆️ Import Attendance<button class="modal-close" onclick="closeModal('modalAttImport')">×</button></div>
+    <div style="background:var(--card2);border-radius:8px;padding:12px;margin-bottom:12px;font-size:12px;color:var(--gray);line-height:1.7;">
+      <div style="font-weight:700;color:var(--gold);margin-bottom:6px;">📋 Required CSV/Excel format:</div>
+      <div style="font-family:monospace;font-size:11px;background:var(--royal);padding:8px;border-radius:6px;margin-bottom:8px;overflow-x:auto;white-space:nowrap;">Name, RollNo, Sport, Batch, DD/MM/YYYY, DD/MM/YYYY, …</div>
+      <div>• <b>Name</b> or <b>RollNo</b> is required to identify the student.</div>
+      <div>• <b>Batch</b> must exactly match the student's batch in the app — rows are skipped if it doesn't.</div>
+      <div>• Add one column per date to mark, with the header as <b>DD/MM/YYYY</b> (e.g. 15/06/2025).</div>
+      <div>• Fill each date column with <b>P</b> for Present, <b>A</b> for Absent. Leave a cell blank to skip that student for that date.</div>
+      <div>• First row treated as header and skipped.</div>
+    </div>
+    <input type="file" id="attImportFileInput" accept=".csv,.xlsx,.xls" style="display:none" onchange="handleAttImportFile(event)">
+    <button class="btn btn-gold" style="width:100%;padding:12px;margin-bottom:8px;" onclick="downloadAttImportTemplate()">📄 Download Excel Template</button>
+    <button class="btn btn-outline" style="width:100%;padding:12px;margin-bottom:10px;" onclick="document.getElementById('attImportFileInput').click()">📂 Choose CSV or Excel File</button>
+    <div id="attImportError" style="display:none;color:#f87171;font-size:12px;padding:8px;background:#f8717120;border-radius:6px;"></div>
+  </div>
+</div>
+
+<!-- ATTENDANCE IMPORT REVIEW / SUBMIT -->
+<div class="modal-overlay" id="modalAttImportResults">
+  <div class="modal">
+    <div class="modal-title">📋 Review Import<button class="modal-close" onclick="closeModal('modalAttImportResults')">×</button></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;" id="attResultTabs">
+      <button class="btn btn-outline btn-sm att-res-tab" id="attResTabBtn-inserted" onclick="showAttResultList('inserted')" style="padding:10px 6px;">✅ New<br><span style="font-size:16px;font-weight:800;" id="attResCount-inserted">0</span></button>
+      <button class="btn btn-outline btn-sm att-res-tab" id="attResTabBtn-updated" onclick="showAttResultList('updated')" style="padding:10px 6px;">🔄 Update<br><span style="font-size:16px;font-weight:800;" id="attResCount-updated">0</span></button>
+      <button class="btn btn-outline btn-sm att-res-tab" id="attResTabBtn-rejected" onclick="showAttResultList('rejected')" style="padding:10px 6px;">❌ Rejected<br><span style="font-size:16px;font-weight:800;" id="attResCount-rejected">0</span></button>
+      <button class="btn btn-outline btn-sm att-res-tab" id="attResTabBtn-skipped" onclick="showAttResultList('skipped')" style="padding:10px 6px;">🗓️ Future Dates<br><span style="font-size:16px;font-weight:800;" id="attResCount-skipped">0</span></button>
+    </div>
+    <div style="font-size:12px;font-weight:700;color:var(--gold);margin-bottom:6px;" id="attResultListLabel"></div>
+    <div style="max-height:320px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;" id="attResultListBody"></div>
+    <div style="display:flex;gap:8px;margin-top:12px;">
+      <button class="btn btn-outline" style="flex:1;" onclick="closeModal('modalAttImportResults')">Cancel</button>
+      <button class="btn btn-primary" style="flex:2;" id="attSubmitBtn" onclick="submitAttImport()">✅ Submit &amp; Apply</button>
+    </div>
+  </div>
+</div>
+
+<!-- FEE IMPORT -->
+<div class="modal-overlay" id="modalFeeImport">
+  <div class="modal">
+    <div class="modal-title">⬆️ Import Fees<button class="modal-close" onclick="closeModal('modalFeeImport')">×</button></div>
+    <div style="background:var(--card2);border-radius:8px;padding:12px;margin-bottom:12px;font-size:12px;color:var(--gray);line-height:1.7;">
+      <div style="font-weight:700;color:var(--gold);margin-bottom:6px;">📋 Required CSV/Excel format:</div>
+      <div style="font-family:monospace;font-size:11px;background:var(--royal);padding:8px;border-radius:6px;margin-bottom:8px;overflow-x:auto;white-space:nowrap;">Name, RollNo, Sport, Month, Status, Amount, Method, PaidDate</div>
+      <div>• <b>Name</b> or <b>RollNo</b> required to identify the student.</div>
+      <div>• <b>Month</b> format: <b>YYYY-MM</b> (e.g. 2025-06)</div>
+      <div>• <b>Status</b>: <b>paid</b> or <b>unpaid</b></div>
+      <div>• <b>Amount</b>: number (e.g. 1500). Optional.</div>
+      <div>• <b>Method</b>: Cash / UPI / Card etc. Optional.</div>
+      <div>• <b>PaidDate</b>: <b>DD/MM/YYYY</b>. Optional.</div>
+      <div>• First row treated as header and skipped.</div>
+    </div>
+    <input type="file" id="feeImportFileInput" accept=".csv,.xlsx,.xls" style="display:none" onchange="handleFeeImportFile(event)">
+    <button class="btn btn-gold" style="width:100%;padding:12px;margin-bottom:8px;" onclick="downloadFeeImportTemplate()">📄 Download Excel Template</button>
+    <button class="btn btn-outline" style="width:100%;padding:12px;margin-bottom:10px;" onclick="document.getElementById('feeImportFileInput').click()">📂 Choose CSV or Excel File</button>
+    <div id="feeImportPreview" style="display:none;">
+      <div style="font-size:12px;font-weight:700;color:var(--gold);margin-bottom:6px;" id="feeImportPreviewLabel"></div>
+      <div style="max-height:200px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;margin-bottom:10px;" id="feeImportPreviewList"></div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-outline" style="flex:1;" onclick="document.getElementById('feeImportFileInput').click()">🔄 Change File</button>
+        <button class="btn btn-primary" style="flex:1;" onclick="confirmFeeImport()">✅ Import All</button>
+      </div>
+    </div>
+    <div id="feeImportError" style="display:none;color:#f87171;font-size:12px;padding:8px;background:#f8717120;border-radius:6px;"></div>
+  </div>
+</div>
+
+<!-- BULK EDIT STUDENTS -->
+<div class="modal-overlay" id="modalBulkEdit">
+  <div class="modal">
+    <div class="modal-title">
+      <span>✏️ Bulk Edit — <span id="bulkEditCountLabel">0</span> Students</span>
+      <button class="modal-close" onclick="closeModal('modalBulkEdit')">×</button>
+    </div>
+    <div style="background:var(--card2);border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:12px;color:var(--gray);line-height:1.6;">
+      Leave a field <b style="color:var(--gold);">blank</b> to keep it unchanged. Only filled fields will be applied to all selected students.
+    </div>
+    <!-- Selected students preview -->
+    <div style="margin-bottom:14px;">
+      <div style="font-size:11px;color:var(--gold);font-weight:700;margin-bottom:6px;">Selected Students:</div>
+      <div id="bulkEditStudentList" style="max-height:110px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-size:12px;color:var(--offwhite);line-height:2;"></div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">School Name <span style="color:var(--gray);font-size:10px;">(leave blank = no change)</span></label>
+      <input type="text" class="form-input" id="bulkSchool" placeholder="e.g. Government Higher Secondary School">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Joining Date <span style="color:var(--gray);font-size:10px;">(leave blank = no change)</span></label>
+      <input type="text" class="form-input" id="bulkJoinDate" placeholder="DD/MM/YYYY">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Batch <span style="color:var(--gray);font-size:10px;">(leave blank = no change)</span></label>
+      <select class="form-select" id="bulkBatch">
+        <option value="">— No change —</option>
+      </select>
+    </div>
+    <button class="btn btn-primary" style="width:100%;padding:12px;" onclick="saveBulkEdit()">💾 Apply to Selected Students</button>
+  </div>
+</div>
+
+<!-- FEE ENTRY -->
+<div class="modal-overlay" id="modalFee">
+  <div class="modal">
+    <div class="modal-title"><span id="modalFeeTitle">Fee Payment</span><button class="modal-close" onclick="closeModal('modalFee')">×</button></div>
+    <input type="hidden" id="feeStudId">
+    <div style="background:var(--card2);border-radius:8px;padding:11px;margin-bottom:12px;">
+      <div style="font-size:15px;font-weight:700;" id="feeStudName"></div>
+      <div style="font-size:12px;color:var(--gray);" id="feeStudBatch"></div>
+      <div style="font-size:12px;color:var(--accent2);margin-top:2px;" id="feeStudContact"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Month</label><select class="form-select" id="feeEntryMonth"></select></div>
+      <div class="form-group"><label class="form-label">Year</label><select class="form-select" id="feeEntryYear"></select></div>
+    </div>
+    <div class="form-group"><label class="form-label">Payment Status</label>
+      <select class="form-select" id="feeEntryStatus" onchange="toggleFeeFields()">
+        <option value="paid">✅ Paid</option>
+        <option value="unpaid">❌ Not Paid</option>
+      </select>
+    </div>
+    <div id="feeAmtFields">
+      <div class="form-group"><label class="form-label">Amount Paid ₹</label><input type="number" class="form-input" id="feeAmount" placeholder="Enter amount" min="1"></div>
+      <div class="form-group"><label class="form-label">Payment Method</label>
+        <select class="form-select" id="feeMethod">
+          <option value="cash">💵 Cash</option>
+          <option value="upi">📱 UPI</option>
+          <option value="other">🔄 Other</option>
+        </select>
+      </div>
+    </div>
+    <div id="feeByInfo" style="display:none;font-size:11px;color:var(--gold);padding:6px 8px;background:var(--card2);border-radius:6px;margin-bottom:10px;"></div>
+    <button class="btn btn-primary" style="width:100%;padding:12px;" onclick="saveFeeEntry()">💾 Save Payment</button>
+  </div>
+</div>
+
+<!-- ADD SPORT -->
+<div class="modal-overlay" id="modalAddSport">
+  <div class="modal">
+    <div class="modal-title">Add Sport<button class="modal-close" onclick="closeModal('modalAddSport')">×</button></div>
+    <div class="form-group"><label class="form-label">Sport Name</label><input type="text" class="form-input" id="newSportName" placeholder="Sport" maxlength="30"></div>
+    <button class="btn btn-primary" style="width:100%;padding:12px;" onclick="saveNewSport()">Add Sport</button>
+  </div>
+</div>
+
+<!-- ADD BATCH -->
+<div class="modal-overlay" id="modalAddBatch">
+  <div class="modal">
+    <div class="modal-title">Add Batch<button class="modal-close" onclick="closeModal('modalAddBatch')">×</button></div>
+    <div class="form-group"><label class="form-label">Sport</label>
+      <select class="form-select" id="newBatchSport"></select>
+      <div style="font-size:10px;color:var(--gray);margin-top:4px;">Each batch belongs to one sport. Add a sport first if the list is empty.</div>
+    </div>
+    <div class="form-group"><label class="form-label">Batch Name</label><input type="text" class="form-input" id="newBatchName" placeholder="e.g. Morning Batch" maxlength="30"></div>
+    <button class="btn btn-primary" style="width:100%;padding:12px;" onclick="saveNewBatch()">Add Batch</button>
+  </div>
+</div>
+
+<!-- EDIT SPORT -->
+<div class="modal-overlay" id="modalEditSport">
+  <div class="modal">
+    <div class="modal-title">Edit Sport<button class="modal-close" onclick="closeModal('modalEditSport')">×</button></div>
+    <input type="hidden" id="editSportIdx">
+    <div class="form-group"><label class="form-label">Sport Name</label><input type="text" class="form-input" id="editSportName" maxlength="30"></div>
+    <div style="display:flex;gap:8px;">
+      <button class="btn btn-danger" style="flex:1;padding:12px;" onclick="deleteSportFromModal()">🗑️ Delete</button>
+      <button class="btn btn-primary" style="flex:2;padding:12px;" onclick="saveEditSport()">💾 Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT BATCH -->
+<div class="modal-overlay" id="modalEditBatch">
+  <div class="modal">
+    <div class="modal-title">Edit Batch<button class="modal-close" onclick="closeModal('modalEditBatch')">×</button></div>
+    <input type="hidden" id="editBatchIdx">
+    <div class="form-group"><label class="form-label">Sport</label>
+      <select class="form-select" id="editBatchSport"></select>
+    </div>
+    <div class="form-group"><label class="form-label">Batch Name</label><input type="text" class="form-input" id="editBatchName" maxlength="30"></div>
+    <div style="display:flex;gap:8px;">
+      <button class="btn btn-danger" style="flex:1;padding:12px;" onclick="deleteBatchFromModal()">🗑️ Delete</button>
+      <button class="btn btn-primary" style="flex:2;padding:12px;" onclick="saveEditBatch()">💾 Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD / EDIT USER -->
+<div class="modal-overlay" id="modalUser">
+  <div class="modal">
+    <div class="modal-title"><span id="modalUserTitle">Add User</span><button class="modal-close" onclick="closeModal('modalUser')">×</button></div>
+    <input type="hidden" id="editUserId">
+    <div class="form-group"><label class="form-label">Email * <span style="color:var(--gray);font-size:10px;">(used to login)</span></label><input type="email" class="form-input" id="newUserId" placeholder="staff@example.com"></div>
+    <div class="form-group"><label class="form-label">Display Name</label><input type="text" class="form-input" id="newUserName" placeholder="Full name"></div>
+    <div class="form-group"><label class="form-label">Password * <span style="color:var(--gray);font-size:10px;">(min 6 characters)</span></label><input type="password" class="form-input" id="newUserPass" placeholder="Set login password"></div>
+    <div class="form-group"><label class="form-label">Role</label>
+      <select class="form-select" id="newUserRole" onchange="toggleBatchAssignField()">
+        <option value="staff">Staff</option>
+      </select>
+      <div style="font-size:10px;color:var(--gray);margin-top:4px;">New accounts are created as Staff. Admin access is managed by the account owner.</div>
+    </div>
+    <div id="batchAssignGroup" style="display:none;">
+      <label class="form-label">Assigned Sports * <span style="color:var(--gray);font-size:10px;">(staff sees only these)</span></label>
+      <div id="sportAssignCheckboxes" style="display:flex;flex-wrap:wrap;gap:8px;padding:10px;background:var(--royal2);border-radius:8px;border:1px solid var(--border);margin-bottom:12px;"></div>
+      <label class="form-label">Assigned Batches * <span style="color:var(--gray);font-size:10px;">(within the selected sports)</span></label>
+      <div id="batchAssignCheckboxes" style="display:flex;flex-wrap:wrap;gap:8px;padding:10px;background:var(--royal2);border-radius:8px;border:1px solid var(--border);"></div>
+      <div style="font-size:11px;color:var(--graydk);margin-top:5px;">Select at least one sport and one batch.</div>
+    </div>
+    <div id="userSaveError" style="display:none;background:#ef444422;border:1px solid #ef4444;border-radius:8px;padding:9px 12px;margin-bottom:10px;font-size:12px;color:#fca5a5;"></div>
+    <button class="btn btn-primary" style="width:100%;padding:12px;" id="saveUserBtn" onclick="saveUser()">💾 Save User</button>
+  </div>
+</div>
+
+<!-- NOTES -->
+<div class="modal-overlay" id="modalNote">
+  <div class="modal">
+    <div class="modal-title">📝 Notes<button class="modal-close" onclick="closeModal('modalNote')">×</button></div>
+    <textarea class="form-input" id="noteText" rows="9" placeholder="Write your notes here…" style="resize:none;"></textarea>
+    <button class="btn btn-primary" style="width:100%;padding:12px;margin-top:10px;" onclick="saveNote()">Save Note</button>
+  </div>
+</div>
+
+<!-- ADD ENQUIRY MODAL -->
+<div class="modal-overlay" id="modalAddEnquiry">
+  <div class="modal">
+    <div class="modal-title">💬 New Query<button class="modal-close" onclick="closeModal('modalAddEnquiry')">×</button></div>
+    <div class="form-group"><label class="form-label">Person Name *</label><input type="text" class="form-input" id="enqName" placeholder="Enter full name"></div>
+    <div class="form-group"><label class="form-label">Phone Number *</label><input type="tel" class="form-input" id="enqPhone" placeholder="Enter phone number" inputmode="numeric"></div>
+    <div class="form-group"><label class="form-label">Query / Interest *</label><textarea class="form-input" id="enqQuery" rows="3" placeholder="What are they enquiring about?" style="resize:none;"></textarea></div>
+    <div class="form-group"><label class="form-label">🏆 Sport *</label>
+      <select class="form-select" id="enqSport"><option value="">— Select sport —</option></select>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Location / Area</label><input type="text" class="form-input" id="enqLocation" placeholder="City or area (optional)"></div>
+      <div class="form-group"><label class="form-label">Conversion Ratio</label>
+        <select class="form-select" id="enqConversion">
+          <option value="">Select…</option>
+          <option value="High">🔥 High</option>
+          <option value="Medium">⚡ Medium</option>
+          <option value="Low">❄️ Low</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">📅 Next Reminder Date</label><input type="date" class="form-input" id="enqReminder"></div>
+    <div class="form-group admin-only" id="enqAssignGroup"><label class="form-label">👤 Assign to Staff</label>
+      <select class="form-select" id="enqAssignTo">
+        <option value="">— Unassigned —</option>
+      </select>
+    </div>
+    <div style="background:var(--card2);border-radius:8px;padding:8px 11px;margin-bottom:12px;font-size:11px;color:var(--gray);">🕐 Date &amp; time recorded automatically.</div>
+    <button class="btn btn-primary" style="width:100%;padding:12px;" onclick="saveEnquiry()">💾 Save Query</button>
+  </div>
+</div>
+<!-- ENQUIRY DETAIL MODAL -->
+<div class="modal-overlay" id="modalEnquiryDetail">
+  <div class="modal">
+    <div class="modal-title">💬 Query Details<button class="modal-close" onclick="closeModal('modalEnquiryDetail')">×</button></div>
+    <div id="enquiryDetailBody"></div>
+    <div style="margin-top:14px;">
+      <button class="btn btn-success" style="width:100%;padding:11px;margin-bottom:8px;font-size:14px;" id="enqConvertBtn">👥 Convert to Student</button>
+      <button class="btn btn-outline" style="width:100%;padding:10px;margin-bottom:8px;font-size:13px;" id="enqArchiveBtn">🗄️ Move to Archive</button>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-danger btn-sm" style="flex:1;" id="enqDeleteBtn">🗑️ Delete</button>
+        <button class="btn btn-warning btn-sm" style="flex:1;" id="enqEditBtn">✏️ Edit</button>
+        <button class="btn btn-outline btn-sm" style="flex:1;" onclick="closeModal('modalEnquiryDetail')">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT ENQUIRY MODAL -->
+<div class="modal-overlay" id="modalEditEnquiry">
+  <div class="modal">
+    <div class="modal-title">✏️ Edit Query<button class="modal-close" onclick="closeModal('modalEditEnquiry')">×</button></div>
+    <input type="hidden" id="editEnqId">
+    <div class="form-group"><label class="form-label">Person Name *</label><input type="text" class="form-input" id="editEnqName" placeholder="Enter full name"></div>
+    <div class="form-group"><label class="form-label">Phone Number *</label><input type="tel" class="form-input" id="editEnqPhone" placeholder="Enter phone number" inputmode="numeric"></div>
+    <div class="form-group"><label class="form-label">Query / Interest *</label><textarea class="form-input" id="editEnqQuery" rows="3" placeholder="What are they enquiring about?" style="resize:none;"></textarea></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Location / Area</label><input type="text" class="form-input" id="editEnqLocation" placeholder="City or area (optional)"></div>
+      <div class="form-group"><label class="form-label">Conversion Ratio</label>
+        <select class="form-select" id="editEnqConversion">
+          <option value="">Select…</option>
+          <option value="High">🔥 High</option>
+          <option value="Medium">⚡ Medium</option>
+          <option value="Low">❄️ Low</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">📅 Next Reminder Date</label><input type="date" class="form-input" id="editEnqReminder"></div>
+    <div class="form-group admin-only" id="editEnqAssignGroup"><label class="form-label">👤 Assign to Staff</label>
+      <select class="form-select" id="editEnqAssignTo">
+        <option value="">— Unassigned —</option>
+      </select>
+    </div>
+    <button class="btn btn-primary" style="width:100%;padding:12px;" onclick="saveEditEnquiry()">💾 Save Changes</button>
+  </div>
+</div>
+
+<!-- MSG TEMPLATE MODAL (Admin only) -->
+<div class="modal-overlay" id="modalMsgTemplate">
+  <div class="modal">
+    <div class="modal-title">✉️ Default Fee Reminder Message<button class="modal-close" onclick="closeModal('modalMsgTemplate')">×</button></div>
+    <div style="font-size:11px;color:var(--gray);margin-bottom:10px;line-height:1.6;">
+      Use <b style="color:var(--gold);">{name}</b> for student name, <b style="color:var(--gold);">{month}</b> for fee month, <b style="color:var(--gold);">{academy}</b> for academy name.
+    </div>
+    <div class="form-group">
+      <label class="form-label">Message Template</label>
+      <textarea class="form-input" id="msgTemplateInput" rows="6" style="resize:none;line-height:1.7;"></textarea>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button class="btn btn-outline" style="flex:1;" onclick="closeModal('modalMsgTemplate')">Cancel</button>
+      <button class="btn btn-primary" style="flex:2;padding:12px;" onclick="saveMsgTemplate()">💾 Save Template</button>
+    </div>
+  </div>
+</div>
+
+<!-- SEND MSG MODAL -->
+<!-- Joined Students Modal -->
+<div class="modal-overlay" id="modalJoinedList">
+  <div class="modal">
+    <div class="modal-title">
+      <span id="modalJoinedTitle">Joined Students</span>
+      <button class="modal-close" onclick="closeModal('modalJoinedList')">×</button>
+    </div>
+    <div id="modalJoinedListWrap"></div>
+  </div>
+</div>
+
+<!-- ===== ATTENDANCE CHART (full screen) ===== -->
+<div class="chart-page" id="attChartPage" style="display:none;">
+  <div class="chart-page-head">
+    <button class="chart-back" onclick="closeChartPage('attChartPage')" aria-label="Back">‹</button>
+    <div class="chart-page-title">📊 Attendance Overview</div>
+  </div>
+  <div class="chart-page-body">
+    <div class="chart-filter-row">
+      <select id="attChartSport" onchange="onAttChartSportChange()" class="form-select"><option value="ALL">All Sports</option></select>
+      <select id="attChartBatch" onchange="renderAttChart()" class="form-select"><option value="ALL">All Batches</option></select>
+    </div>
+    <div class="chart-filter-row">
+      <select id="attChartView" onchange="onAttChartViewChange()" class="form-select" style="flex:0 0 auto;width:auto;">
+        <option value="day">📅 Day</option>
+        <option value="month" selected>📆 Month</option>
+        <option value="year">🗓️ Year</option>
+      </select>
+      <input type="date"  id="attChartDate"  onchange="renderAttChart()" class="form-input" style="display:none;">
+      <input type="month" id="attChartMonth" onchange="renderAttChart()" class="form-input">
+      <select id="attChartYear" onchange="renderAttChart()" class="form-select" style="display:none;"></select>
+    </div>
+    <div id="attChartWrap" style="margin-top:14px;"></div>
+  </div>
+</div>
+
+<!-- ===== FEES CHART (full screen) ===== -->
+<div class="chart-page" id="feeChartPage" style="display:none;">
+  <div class="chart-page-head">
+    <button class="chart-back" onclick="closeChartPage('feeChartPage')" aria-label="Back">‹</button>
+    <div class="chart-page-title">📊 Fees Overview</div>
+  </div>
+  <div class="chart-page-body">
+    <div class="chart-filter-row">
+      <select id="feeChartSport" onchange="onFeeChartSportChange()" class="form-select"><option value="ALL">All Sports</option></select>
+      <select id="feeChartBatch" onchange="renderFeeChart()" class="form-select"><option value="ALL">All Batches</option></select>
+    </div>
+    <div class="chart-filter-row">
+      <select id="feeChartView" onchange="onFeeChartViewChange()" class="form-select" style="flex:0 0 auto;width:auto;">
+        <option value="month" selected>📆 Month</option>
+        <option value="year">🗓️ Year</option>
+      </select>
+      <input type="month" id="feeChartMonth" onchange="renderFeeChart()" class="form-input">
+      <select id="feeChartYear" onchange="renderFeeChart()" class="form-select" style="display:none;"></select>
+    </div>
+    <div id="feeChartWrap" style="margin-top:14px;"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalSendMsg">
+  <div class="modal">
+    <div class="modal-title">📨 Send Fee Reminder<button class="modal-close" onclick="closeModal('modalSendMsg')">×</button></div>
+    <div id="sendMsgStudentInfo" style="background:var(--card2);border-radius:8px;padding:10px;margin-bottom:12px;font-size:13px;"></div>
+    <div class="form-group">
+      <label class="form-label">Message</label>
+      <textarea class="form-input" id="sendMsgText" rows="5" style="resize:none;line-height:1.7;"></textarea>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:4px;">
+      <button class="btn btn-outline btn-sm" style="flex:1;" onclick="gatedFeature('whatsapp','sendFeeMsg',['sms'])" id="btnSendSMS">📱 SMS</button>
+      <button class="btn btn-success btn-sm" style="flex:2;" onclick="gatedFeature('whatsapp','sendFeeMsg',['whatsapp'])" id="btnSendWhatsApp">💬 WhatsApp</button>
+    </div>
+  </div>
+</div>
+<!-- SETTINGS MODAL -->
+<div class="modal-overlay" id="modalSettings">
+  <div class="modal">
+    <div class="modal-title">
+      <span>⚙️ Settings</span>
+      <button class="modal-close" onclick="closeModal('modalSettings')">×</button>
+    </div>
+
+    <!-- Theme — ALL users -->
+    <div style="margin-bottom:16px;">
+      <div class="section-title" style="font-size:13px;margin-bottom:8px;">🎨 Appearance</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--royal2);border-radius:8px;padding:11px 12px;">
+        <span style="font-size:13px;font-weight:600;color:var(--offwhite);">Theme</span>
+        <button class="btn btn-outline btn-sm" id="themeToggleBtn" onclick="toggleTheme()" title="Switch theme">🌙 Dark</button>
+      </div>
+    </div>
+
+    <!-- Account — all users -->
+    <div style="margin-bottom:16px;">
+      <div class="section-title" style="font-size:13px;margin-bottom:8px;">🔐 Account</div>
+      <button class="btn btn-outline btn-sm" style="width:100%;" onclick="openMyPassModal()">🔑 Change My Password</button>
+    </div>
+
+    <!-- Sync Popup toggle — admin only -->
+    <div class="admin-only" style="margin-bottom:16px;">
+      <div class="section-title" style="font-size:13px;margin-bottom:8px;">🔄 Live Sync</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--royal2);border-radius:8px;padding:11px 12px;">
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:13px;font-weight:600;color:var(--offwhite);">Change popups</div>
+          <div style="font-size:10.5px;color:var(--gray);margin-top:2px;line-height:1.5;">Show a popup naming who made a change when another device syncs</div>
+        </div>
+        <button class="btn btn-outline btn-sm" id="rtPopupToggleBtn" onclick="toggleRtPopup()" title="Turn change popups on/off">Off</button>
+      </div>
+    </div>
+
+    <!-- Firebase Sync section removed — app now uses Supabase with realtime sync -->
+
+    <!-- Admin-only section -->
+    <div id="settingsAdminOnly" style="display:none;">
+      <div style="height:1px;background:var(--border);margin:4px 0 16px;"></div>
+
+      <!-- Data Backup & Restore -->
+      <div style="margin-bottom:16px;">
+        <div class="section-title" style="font-size:13px;margin-bottom:6px;">💾 Data Backup &amp; Restore</div>
+        <div style="font-size:11px;color:var(--gray);margin-bottom:10px;line-height:1.6;">
+          Export all academy data to a JSON file, or restore from a previously exported file.
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" style="flex:1;" onclick="exportAllData()">⬇️ Export Data</button>
+          <button class="btn btn-outline btn-sm" style="flex:1;" onclick="document.getElementById('importDataFileSettings').click()">⬆️ Import Data</button>
+        </div>
+        <input type="file" id="importDataFileSettings" accept=".json" style="display:none" onchange="importAllData(event)">
+        <div id="importDataStatusSettings" style="font-size:11px;margin-top:8px;display:none;color:#4ade80;"></div>
+      </div>
+
+      <div style="height:1px;background:var(--border);margin:4px 0 16px;"></div>
+
+      <!-- Daily Snapshots -->
+      <div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+          <div class="section-title" style="margin-bottom:0;font-size:13px;">📸 Daily Snapshots</div>
+          <button class="btn btn-primary btn-xs" onclick="takeSnapshotFromSettings()">📸 Snap Now</button>
+        </div>
+        <div style="font-size:11px;color:var(--gray);margin-bottom:10px;line-height:1.6;">
+          Daily restore point created on first login. Use <b>↩ Restore</b> to undo accidental changes.
+        </div>
+        <div id="snapshotListWrapSettings" style="max-height:280px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;">
+          <div class="empty-state" style="padding:14px;">Loading…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LOG A CLASS MODAL -->
+<div class="modal-overlay" id="modalClassLogAdd">
+  <div class="modal" style="max-width:420px;padding:0;overflow:hidden;display:flex;flex-direction:column;">
+    <!-- Header -->
+    <div style="display:flex;align-items:center;gap:12px;padding:18px 20px;border-bottom:1px solid var(--border);flex-shrink:0;">
+      <div style="width:42px;height:42px;border-radius:11px;background:var(--accent2);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:16px;font-weight:700;color:var(--offwhite);line-height:1.2;">Log a Class</div>
+        <div style="font-size:12px;color:var(--gray);margin-top:1px;">Record a completed class session</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modalClassLogAdd')" style="position:static;">×</button>
+    </div>
+
+    <!-- Body -->
+    <div style="padding:18px 20px;overflow-y:auto;flex:1;min-height:0;">
+      <div class="form-row" style="margin-bottom:14px;">
+        <div class="form-group" style="margin-bottom:0;">
+          <label class="form-label">Date</label>
+          <input type="date" class="form-input" id="classLogDate">
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label class="form-label">🏆 Sport</label>
+          <select class="form-select" id="classLogSport" onchange="onClassLogSportChange()"></select>
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:14px;">
+        <label class="form-label">Batch</label>
+        <select class="form-select" id="classLogBatch"></select>
+      </div>
+
+      <div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:14px;">
+        <div style="font-size:11px;font-weight:700;color:var(--gray);letter-spacing:.4px;margin-bottom:10px;">⏱ CLASS TIMING</div>
+        <div class="form-row" style="margin-bottom:0;">
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label" style="color:#16a34a;">🟢 In Time</label>
+            <input type="time" class="form-input" id="classLogInTime">
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label" style="color:#dc2626;">🔴 Out Time</label>
+            <input type="time" class="form-input" id="classLogOutTime">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-bottom:0;">
+        <label class="form-label">Session Notes <span style="font-weight:400;color:var(--gray);">(optional)</span></label>
+        <textarea class="form-input" id="classLogNote" rows="3" placeholder="e.g. Warm-up, basics, drills…" style="resize:none;"></textarea>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="display:flex;gap:10px;padding:14px 20px;border-top:1px solid var(--border);background:var(--card2);flex-shrink:0;">
+      <button class="btn btn-outline" style="flex:1;padding:11px;" onclick="closeModal('modalClassLogAdd')">Cancel</button>
+      <button class="btn btn-primary" style="flex:2;padding:11px;" onclick="saveClassLog()">💾 Save Entry</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT CLASS LOG MODAL (admin only) -->
+<div class="modal-overlay" id="modalClassLogEdit">
+  <div class="modal">
+    <div class="modal-title">
+      <span>✏️ Edit Class Log</span>
+      <button class="modal-close" onclick="closeModal('modalClassLogEdit')">×</button>
+    </div>
+    <input type="hidden" id="editClassLogId">
+    <div class="form-row" style="margin-bottom:8px;">
+      <div class="form-group" style="margin-bottom:0;">
+        <label class="form-label">Date</label>
+        <input type="date" class="form-input" id="editClassLogDate">
+      </div>
+      <div class="form-group" style="margin-bottom:0;">
+        <label class="form-label">Batch</label>
+        <select class="form-select" id="editClassLogBatch"></select>
+      </div>
+    </div>
+    <div class="form-row" style="margin-bottom:8px;">
+      <div class="form-group" style="margin-bottom:0;">
+        <label class="form-label">🟢 In Time</label>
+        <input type="time" class="form-input" id="editClassLogInTime">
+      </div>
+      <div class="form-group" style="margin-bottom:0;">
+        <label class="form-label">🔴 Out Time</label>
+        <input type="time" class="form-input" id="editClassLogOutTime">
+      </div>
+    </div>
+    <div class="form-group" style="margin-bottom:12px;">
+      <label class="form-label">What was covered? (optional)</label>
+      <textarea class="form-input" id="editClassLogNote" rows="3" style="resize:none;"></textarea>
+    </div>
+    <button class="btn btn-primary" style="width:100%;padding:12px;" onclick="saveClassLogEdit()">💾 Update Entry</button>
+  </div>
+</div>
+
+<!-- ASSIGN BATCH MODAL -->
+<div class="modal-overlay" id="modalAssignBatch">
+  <div class="modal">
+    <div class="modal-title">
+      <span>📦 Assign Batches</span>
+      <button class="modal-close" onclick="closeModal('modalAssignBatch')">×</button>
+    </div>
+    <input type="hidden" id="assignBatchUserId">
+    <div style="background:var(--card2);border-radius:8px;padding:10px 12px;margin-bottom:12px;">
+      <div style="font-size:13px;font-weight:700;color:var(--offwhite);" id="assignBatchUserName"></div>
+      <div style="font-size:11px;color:var(--gray);margin-top:2px;" id="assignBatchUserEmail"></div>
+    </div>
+    <div style="font-size:12px;color:var(--gray);margin-bottom:10px;line-height:1.6;">
+      Tick the batches this staff can access. Leave all unchecked to allow access to all batches.
+    </div>
+    <div id="assignBatchCheckboxes" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;"></div>
+    <button class="btn btn-primary" style="width:100%;padding:12px;" onclick="saveAssignBatch()">💾 Save Batch Assignment</button>
+  </div>
+</div>
+
+<!-- ASSIGN BATCH MODAL -->
+<!-- CONFIRM DIALOG -->
+<div class="confirm-overlay" id="confirmDlg">
+  <div class="confirm-box">
+    <div class="confirm-icon" id="cfIcon">❓</div>
+    <div class="confirm-title" id="cfTitle">Are you sure?</div>
+    <div class="confirm-msg" id="cfMsg">This action cannot be undone.</div>
+    <div class="confirm-btns">
+      <button style="background:var(--card2);color:var(--white);" id="cfNo" onclick="closeConfirm()">No</button>
+      <button style="background:var(--accent2);color:#fff;" id="cfYes">Yes, Proceed</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- SYNC NOTIFICATION BANNER -->
+<div id="syncBanner">
+  <div class="sync-banner-inner">
+    <div class="sync-banner-icon" id="syncBannerIcon">🔄</div>
+    <div class="sync-banner-text">
+      <div class="sync-banner-title" id="syncBannerTitle">Data Updated</div>
+      <div class="sync-banner-detail" id="syncBannerDetail"></div>
+      <div class="sync-banner-time" id="syncBannerTime"></div>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+
+<!-- ============================================================
+     PWA — Service Worker Registration
+     ============================================================ -->
+<script src="js/sw-register.js"></script>
+
+
+<!-- ===== TASK SCHEDULE: ASSIGN MODAL ===== -->
+<div class="modal-overlay" id="modalTaskSchedule">
+  <div class="modal" style="max-width:520px;">
+    <div class="modal-title">
+      <span id="tsModalTitle">📅 Assign New Task</span>
+      <button class="modal-close" onclick="closeModal('modalTaskSchedule')">×</button>
+    </div>
+
+    <!-- Task description -->
+    <div class="form-group">
+      <label class="form-label">Task / Activity *</label>
+      <input type="text" class="form-input" id="tsTask" placeholder="e.g. Morning Silambam Training">
+    </div>
+
+    <!-- Class: sport + batch (1 class per staff) -->
+    <div style="display:flex;gap:8px;" class="form-group">
+      <div style="flex:1;">
+        <label class="form-label">Sport</label>
+        <select class="form-select" id="tsSport" onchange="onTsSportChange()" style="font-size:13px;"></select>
+      </div>
+      <div style="flex:1;">
+        <label class="form-label">Batch / Class</label>
+        <select class="form-select" id="tsBatch" style="font-size:13px;"></select>
+      </div>
+    </div>
+
+    <!-- Date range -->
+    <div style="display:flex;gap:8px;" class="form-group">
+      <div style="flex:1;">
+        <label class="form-label">From Date *</label>
+        <input type="date" class="form-input" id="tsDateFrom" onchange="onTsDateChange()">
+      </div>
+      <div style="flex:1;">
+        <label class="form-label">To Date</label>
+        <input type="date" class="form-input" id="tsDateTo" onchange="onTsDateChange()">
+        <div style="font-size:10px;color:var(--gray);margin-top:3px;">Leave blank for single day</div>
+      </div>
+    </div>
+
+    <!-- Recurring days of week -->
+    <div class="form-group" id="tsRecurringWrap" style="display:none;">
+      <label class="form-label">Repeat on days *</label>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;" id="tsDayChips">
+        <label class="ts-day-chip"><input type="checkbox" value="0"> Sun</label>
+        <label class="ts-day-chip"><input type="checkbox" value="1"> Mon</label>
+        <label class="ts-day-chip"><input type="checkbox" value="2"> Tue</label>
+        <label class="ts-day-chip"><input type="checkbox" value="3"> Wed</label>
+        <label class="ts-day-chip"><input type="checkbox" value="4"> Thu</label>
+        <label class="ts-day-chip"><input type="checkbox" value="5"> Fri</label>
+        <label class="ts-day-chip"><input type="checkbox" value="6"> Sat</label>
+      </div>
+      <div style="font-size:10px;color:var(--gray);margin-top:5px;" id="tsRecurringPreview"></div>
+    </div>
+
+    <!-- Times -->
+    <div style="display:flex;gap:8px;" class="form-group">
+      <div style="flex:1;">
+        <label class="form-label">In Time</label>
+        <input type="time" class="form-input" id="tsInTime" style="font-size:14px;padding:8px 10px;">
+      </div>
+      <div style="flex:1;">
+        <label class="form-label">Out Time</label>
+        <input type="time" class="form-input" id="tsOutTime" style="font-size:14px;padding:8px 10px;">
+      </div>
+    </div>
+
+    <!-- Location -->
+    <div class="form-group">
+      <label class="form-label">Location / Venue</label>
+      <input type="text" class="form-input" id="tsLocation" placeholder="e.g. Main Hall, St. Mary's School">
+    </div>
+
+    <!-- Staff (multiple allowed per class) -->
+    <div class="form-group">
+      <label class="form-label">Assign To * <span style="font-size:10px;color:var(--gray);">(multiple staff can share one class)</span></label>
+      <div id="tsStaffList" style="max-height:160px;overflow-y:auto;"></div>
+    </div>
+
+    <!-- Note -->
+    <div class="form-group">
+      <label class="form-label">Note / Instructions</label>
+      <textarea class="form-input" id="tsNote" rows="2" placeholder="Any special instructions…" style="resize:none;"></textarea>
+    </div>
+
+    <!-- Preview -->
+    <div id="tsAssignPreview" style="display:none;background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:10px;margin-bottom:10px;font-size:12px;color:var(--offwhite);"></div>
+
+    <div style="display:flex;gap:8px;margin-top:6px;">
+      <button class="btn" style="flex:1;background:var(--card2);" onclick="closeModal('modalTaskSchedule')">Cancel</button>
+      <button class="btn btn-primary" style="flex:2;" onclick="saveTaskSchedule()">💾 Save</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===== TASK SCHEDULE: VIEW DETAIL MODAL ===== -->
+<div class="modal-overlay" id="modalViewTask">
+  <div class="modal" style="max-width:480px;">
+    <div class="modal-title">
+      <span>📋 Task Detail</span>
+      <button class="modal-close" onclick="closeModal('modalViewTask')">×</button>
+    </div>
+    <div id="viewTaskBody"></div>
+  </div>
+</div>
+
+
+<!-- ===== APPLY LEAVE MODAL (Staff) ===== -->
+<div class="modal-overlay" id="modalApplyLeave">
+  <div class="modal" style="max-width:400px;">
+    <div class="modal-title">
+      <span>🏖️ Apply for Leave</span>
+      <button class="modal-close" onclick="closeModal('modalApplyLeave')">×</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Leave Date</label>
+      <input type="date" class="form-input" id="leaveDate">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Reason</label>
+      <textarea class="form-input" id="leaveReason" rows="3" placeholder="e.g. Personal work, medical appointment…" style="resize:none;"></textarea>
+    </div>
+    <div id="leaveTaskWarning" style="display:none;background:#f59e0b18;border:1px solid #f59e0b44;border-radius:10px;padding:10px 12px;margin-bottom:12px;font-size:12px;color:#b45309;"></div>
+    <div style="display:flex;gap:8px;">
+      <button class="btn" style="flex:1;background:var(--card2);" onclick="closeModal('modalApplyLeave')">Cancel</button>
+      <button class="btn btn-primary" style="flex:2;" onclick="submitLeaveRequest()">📤 Submit Request</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADMIN LEAVE REVIEW MODAL ===== -->
+<div class="modal-overlay" id="modalLeaveReview">
+  <div class="modal" style="max-width:480px;">
+    <div class="modal-title">
+      <span>📋 Leave Request</span>
+      <button class="modal-close" onclick="closeModal('modalLeaveReview')">×</button>
+    </div>
+    <div id="leaveReviewBody"></div>
+  </div>
+</div>
+
+<!-- Full-height tab panel — placed OUTSIDE #app to avoid overflow:hidden clipping -->
+<div id="tabDropdown" style="position:fixed;top:0;right:0;bottom:0;width:72vw;max-width:280px;background:var(--card);border-left:1px solid var(--border);box-shadow:-4px 0 24px rgba(0,0,0,.45);z-index:600;flex-direction:column;display:flex;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);">
+  <!-- Panel header -->
+  <div style="padding:14px 14px 12px;border-bottom:1px solid var(--border);background:var(--card2);">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <!-- Academy logo — small circle, mirrors topbar -->
+        <div id="tabPanelLogo" style="width:36px;height:36px;border-radius:50%;background:var(--accent2);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;flex-shrink:0;overflow:hidden;box-shadow:0 2px 6px rgba(91,124,196,.3);">⚔️</div>
+        <div style="font-size:clamp(10px,3vw,13px);font-weight:800;color:var(--offwhite);line-height:1.25;max-width:150px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;white-space:normal;word-break:break-word;" id="tabPanelAcadName">Academy</div>
+      </div>
+      <!-- Close button — clear X -->
+      <button onclick="closeTabMenu()"
+        style="width:32px;height:32px;border-radius:8px;background:var(--card);border:1px solid var(--border);color:var(--offwhite);font-size:18px;font-weight:400;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">✕</button>
+    </div>
+    <!-- User info card -->
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px;">
+      <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent2),#7c9ee8);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;flex-shrink:0;" id="tabPanelAvatar">U</div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:13px;font-weight:700;color:var(--offwhite);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" id="tabPanelUserName"></div>
+        <div style="margin-top:3px;">
+          <span id="tabPanelRoleBadge" style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;background:var(--accent2)22;color:var(--accent2);border:1px solid var(--accent2)44;"></span>
+          <span id="tabPanelPlanBadge" style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;margin-left:4px;display:none;"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Nav items -->
+  <nav style="flex:1;overflow-y:auto;padding:8px;">
+    <button class="tab-drop-item active" id="tnav-home"        onclick="tabNav('home')">        🏠 <span>Home</span></button>
+    <button class="tab-drop-item"        id="tnav-students"    onclick="tabNav('students')">    👥 <span>Students</span></button>
+    <button class="tab-drop-item"        id="tnav-attendance"  onclick="tabNav('attendance')">  📅 <span>Attendance</span></button>
+    <button class="tab-drop-item"        id="tnav-fees"        onclick="tabNav('fees')">        💰 <span>Fees</span></button>
+    <button class="tab-drop-item"        id="tnav-enquiry"     onclick="tabNav('enquiry')"     style="display:none;">💬 <span>Enquiry</span></button>
+    <button class="tab-drop-item"        id="tnav-activity"    onclick="tabNav('activity')"    style="display:none;">📋 <span>Activity Log</span></button>
+    <button class="tab-drop-item"        id="tnav-performance" onclick="tabNav('performance')" style="display:none;">🏆 <span>Performance</span></button>
+    <button class="tab-drop-item"        id="tnav-schedules"   onclick="tabNav('schedules')"   style="display:none;">📅 <span>Schedules</span></button>
+    <button class="tab-drop-item"        id="tnav-profile"     onclick="tabNav('profile')">     👤 <span>Profile</span></button>
+  </nav>
+  <!-- Logout at bottom -->
+  <div style="padding:10px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:7px;">
+    <button style="width:100%;padding:11px;background:none;border:1px solid var(--border);border-radius:10px;color:var(--red);font-size:13px;font-weight:700;cursor:pointer;" onclick="closeTabMenu();doLogout()">🚪 Logout</button>
+  </div>
+</div>
+<!-- Tap-outside overlay for tab panel -->
+<div id="tabPanelOverlay" style="display:none;position:fixed;inset:0;z-index:599;" onclick="closeTabMenu()"></div>
+
+<!-- ===== LOGO CROPPER MODAL ===== -->
+<div class="modal-overlay" id="modalLogoCrop">
+  <div class="modal" style="max-width:360px;padding:20px;">
+    <div class="modal-title">
+      <span>✂️ Crop Logo</span>
+      <button class="modal-close" onclick="closeModal('modalLogoCrop')">×</button>
+    </div>
+    <p style="font-size:12px;color:var(--gray);margin-bottom:12px;text-align:center;">Drag to reposition · Pinch or slider to zoom</p>
+
+    <!-- Canvas -->
+    <div style="display:flex;justify-content:center;margin-bottom:16px;">
+      <canvas id="cropCanvas" width="260" height="260"
+        style="border-radius:50%;cursor:grab;touch-action:none;box-shadow:0 4px 20px rgba(0,0,0,.2);"
+        onmousedown="_cropPointerDown(event)"
+        onmousemove="_cropPointerMove(event)"
+        onmouseup="_cropPointerUp()"
+        onmouseleave="_cropPointerUp()"
+        ontouchstart="_cropPointerDown(event)"
+        ontouchmove="_cropPointerMove(event)"
+        ontouchend="_cropPointerUp()"
+        onwheel="_cropWheel(event)">
+      </canvas>
+    </div>
+
+    <!-- Zoom slider -->
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">
+      <span style="font-size:16px;">🔍</span>
+      <input type="range" id="cropZoomRange" min="50" max="300" value="100"
+        style="flex:1;accent-color:var(--accent2);"
+        oninput="_cropSetZoom(parseInt(this.value))">
+      <span id="cropZoomVal" style="font-size:12px;font-weight:700;color:var(--accent2);min-width:38px;text-align:right;">100%</span>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex;gap:8px;">
+      <button class="btn" style="flex:1;background:var(--card2);" onclick="closeModal('modalLogoCrop')">Cancel</button>
+      <button class="btn btn-primary" style="flex:2;" onclick="saveLogoCrop()">✅ Save Logo</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== NOTIFICATION PANEL ===== -->
+<div id="notifPanel" style="display:none;position:fixed;top:58px;right:10px;width:320px;max-width:94vw;background:var(--card);border:1px solid var(--border);border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,.18);z-index:700;overflow:hidden;flex-direction:column;">
+  <!-- Header -->
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 14px 10px;border-bottom:1px solid var(--border);background:var(--card2);">
+    <span style="font-size:14px;font-weight:800;color:var(--offwhite);">🔔 Notifications</span>
+    <button onclick="markAllNotifsRead()" style="font-size:11px;font-weight:700;color:var(--accent2);background:none;border:none;cursor:pointer;padding:0;">Mark all read</button>
+  </div>
+  <!-- Sections list -->
+  <div id="notifBody" style="overflow-y:auto;max-height:72vh;padding:8px 0;"></div>
+</div>
+<!-- Tap outside to close -->
+<div id="notifOverlay" style="display:none;position:fixed;inset:0;z-index:699;" onclick="closeNotifPanel()"></div>
+
+<!-- Notification drill-down mini modal -->
+<div class="modal-overlay" id="modalNotifDetail">
+  <div class="modal" style="max-width:380px;padding:0;overflow:hidden;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 14px;background:var(--card2);border-bottom:1px solid var(--border);">
+      <span id="notifDetailTitle" style="font-size:14px;font-weight:800;color:var(--offwhite);"></span>
+      <button class="modal-close" onclick="closeModal('modalNotifDetail')">×</button>
+    </div>
+    <div id="notifDetailBody" style="overflow-y:auto;max-height:60vh;padding:10px 12px;"></div>
+  </div>
+</div>
+
+<script src="js/notifications.js"></script>
+
+
+
+<!--
+  ============================================================
+  FeeZoapp Professional — Stage 6B-2: Customer App Patch
+  ============================================================
+  PASTE THIS ENTIRE BLOCK INTO YOUR EXISTING index.html
+  Just before the closing </body> tag.
+
+  This adds 4 things on top of your existing app:
+  1. Trial countdown banner (top of screen)
+  2. Frozen screen (full-page overlay when trial/plan expired)
+  3. View Plans / Subscribe modal (shows your 3 plans)
+  4. Superadmin redirect (if a superadmin logs in here → bounce to admin.html)
+
+  Everything else in your existing index.html keeps working as-is.
+  ============================================================
+-->
+
+
+<!-- ============ FROZEN SCREEN ============ -->
+<div id="fzFrozenScreen">
+  <div class="fz-stars" id="fzStars"></div>
+
+  <div class="fz-frozen-wrap">
+
+    <!-- WHY BANNER -->
+    <div class="fz-reason-banner" id="fzReasonBanner">
+      <div class="fz-reason-icon-wrap">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+      </div>
+      <div class="fz-reason-banner-text">
+        <div class="fz-reason-banner-title" id="fzReasonTitle">Your 7-day free trial has expired</div>
+        <div class="fz-reason-banner-sub" id="fzReasonSub">Account paused on <span id="fzReasonDate">—</span></div>
+      </div>
+    </div>
+
+    <!-- STATUS BADGE -->
+    <div class="fz-frozen-badge" id="fzFrozenBadge">
+      <span class="fz-badge-dot"></span>
+      Free Trial Ended
+    </div>
+
+    <!-- MAIN CARD -->
+    <div class="fz-frozen-card">
+
+      <!-- Red top section -->
+      <div class="fz-frozen-card-top">
+        <div class="fz-frozen-icon-wrap" id="fzIconWrap">
+          <!-- SVG icon swapped by JS per state -->
+          <svg id="fzIconSvg" class="fz-frozen-icon-svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.95)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </div>
+        <div class="fz-frozen-title" id="fzFrozenTitle">Your Free Trial Has Ended</div>
+        <div class="fz-frozen-subtitle" id="fzFrozenSub">Subscribe now to continue managing your academy without interruption</div>
+      </div>
+
+      <!-- Body -->
+      <div class="fz-frozen-card-body">
+
+        <!-- Safe strip -->
+        <div class="fz-data-safe">
+          <div class="fz-data-safe-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/>
+            </svg>
+          </div>
+          <div class="fz-data-safe-text">
+            <b>Your data is 100% safe &amp; preserved</b>
+            All students, attendance records and fees are waiting. Subscribe anytime to restore full access instantly.
+          </div>
+        </div>
+
+        <!-- Engagement stats (loaded by JS) -->
+        <div class="fz-frozen-stats" id="fzFrozenStats" style="display:none;">
+          <div class="fz-frozen-stat-tile">
+            <div class="fz-frozen-stat-val" id="fzStatStudents">—</div>
+            <div class="fz-frozen-stat-label">Students</div>
+          </div>
+          <div class="fz-frozen-stat-tile">
+            <div class="fz-frozen-stat-val" id="fzStatAttendance">—</div>
+            <div class="fz-frozen-stat-label">Records</div>
+          </div>
+          <div class="fz-frozen-stat-tile">
+            <div class="fz-frozen-stat-val" id="fzStatDays">—</div>
+            <div class="fz-frozen-stat-label">Days</div>
+          </div>
+        </div>
+
+        <!-- CTAs -->
+        <div class="fz-frozen-divider">Get started</div>
+        <div class="fz-frozen-actions">
+          <button class="fz-frozen-btn-primary" onclick="fzOpenPlans()">
+            View Plans &amp; Subscribe →
+          </button>
+          <button class="fz-frozen-btn-wa" onclick="fzContactSupport()">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Chat with us on WhatsApp
+          </button>
+          <button class="fz-frozen-btn-secondary" onclick="fzSignOutFromFrozen()">Sign out</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="fz-frozen-note">
+      Need help? Email <a href="mailto:support@feezo.com" id="fzSupportEmail">support@feezo.com</a><br>
+      Already subscribed? <a href="#" onclick="location.reload()">Click here to refresh</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ PLANS MODAL ============ -->
+<div id="fzPlansOverlay">
+  <div class="fz-plans-modal">
+
+    <div class="fz-plans-top">
+      <button class="fz-plans-close" onclick="fzClosePlans()">×</button>
+      <div class="fz-plans-eyebrow">UPGRADE YOUR ACADEMY</div>
+      <div class="fz-plans-title">Choose your plan</div>
+      <div class="fz-plans-sub">Your data is safe — pick a plan to continue</div>
+    </div>
+
+    <div class="fz-plans-cards" id="fzPlansGrid"></div>
+
+    <div class="fz-plans-foot">
+      <button class="fz-plans-cta" id="fzPlansCta" onclick="fzCallToActivate()">
+        <i class="ti ti-phone-call"></i>
+        <span id="fzCtaText">Call to activate Pro</span>
+      </button>
+      <button class="fz-plans-wa" onclick="fzSubscribeWhatsApp()">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Message us on WhatsApp
+      </button>
+      <div class="fz-contact-row" id="fzContactRow">
+        <div class="fz-contact-item">
+          <div class="fz-contact-icon"><i class="ti ti-phone"></i></div>
+          <a class="fz-contact-link" id="fzPhone1Link" href="#">—</a>
+        </div>
+        <div class="fz-contact-sep"></div>
+        <div class="fz-contact-item">
+          <div class="fz-contact-icon"><i class="ti ti-brand-whatsapp"></i></div>
+          <a class="fz-contact-link" id="fzPhone2Link" href="#">—</a>
+        </div>
+        <div class="fz-contact-sep"></div>
+        <div class="fz-contact-item">
+          <div class="fz-contact-icon"><i class="ti ti-mail"></i></div>
+          <a class="fz-contact-link" id="fzEmailLink" href="#">—</a>
+        </div>
+      </div>
+      <div class="fz-plans-slogan">Manage smarter. Grow faster. FeeZo.</div>
+    </div>
+
+  </div>
+</div>
+
+<script src="js/customer-patch.js"></script>
+
+
+</body>
+</html>
